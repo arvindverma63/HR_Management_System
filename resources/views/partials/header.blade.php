@@ -1,7 +1,7 @@
   <!-- Header -->
             <div
                 class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 space-y-4 md:space-y-0">
-                <h2 class="text-2xl md:text-4xl font-bold text-gray-900">Welcome, Admin</h2>
+                <h2 class="text-2xl md:text-4xl font-bold text-gray-900 mr-10">Welcome, Admin</h2>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm md:text-lg text-gray-600">Friday, May 16, 2025</span>
                     <div class="relative">

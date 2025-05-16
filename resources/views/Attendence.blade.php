@@ -130,5 +130,5 @@
 
 
 </body>
-
+@include('partials.js')
 </html>
