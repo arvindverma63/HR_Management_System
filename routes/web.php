@@ -15,5 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', [PageController::class, 'newWorkmenPage'])->name('new-workmen');
+Route::get('/',function(){
+    return view('auth');
+})->name('login');
+Route::get('/new-workmen', [PageController::class, 'newWorkmenPage'])->name('new-workmen');
 Route::get('/attendence', [PageController::class, 'takeAttendencePage'])->name('attendence');
