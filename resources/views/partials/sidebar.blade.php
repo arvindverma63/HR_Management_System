@@ -10,10 +10,10 @@
      </div>
      <nav class="flex-1">
          <a href="{{ route('new-workmen') }}"
-             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ Route::currentRouteNamed('new-workmen') ? 'bg-custom-blue-dark' : '' }}">New
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-workmen') ? 'bg-blue-950' : '' }}">New
              Workmen Form</a>
          <a href="{{ route('attendence') }}"
-             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ Route::currentRouteNamed('attendence') ? 'bg-custom-blue-dark' : '' }}">Take
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('attendence') ? 'bg-custom-blue-dark' : '' }}">Take
              Attendance</a>
      </nav>
 
