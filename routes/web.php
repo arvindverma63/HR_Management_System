@@ -20,3 +20,4 @@ Route::get('/',function(){
 })->name('login');
 Route::get('/new-workmen', [PageController::class, 'newWorkmenPage'])->name('new-workmen');
 Route::get('/attendence', [PageController::class, 'takeAttendencePage'])->name('attendence');
+Route::get('/reports',[PageController::class,'reportsPage'])->name('reports');

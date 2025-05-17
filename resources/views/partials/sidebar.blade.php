@@ -15,6 +15,9 @@
          <a href="{{ route('attendence') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('attendence') ? 'bg-blue-950' : '' }}">Take
              Attendance</a>
+         <a href="{{ route('reports') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('reports') ? 'bg-blue-950' : '' }}">Reports</a>
+
      </nav>
 
      <div class="p-4 md:p-6">

@@ -12,4 +12,7 @@ class PageController extends Controller
     public function newWorkmenPage(){
         return view('welcome');
     }
+    public function reportsPage(){
+        return view('reports');
+    }
 }

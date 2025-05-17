@@ -10,7 +10,7 @@
             <div class="p-6 md:p-8">
                 <!-- Header -->
                 <div class="flex justify-center mb-6">
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">HR Dashboard</h1>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">Admin Dashboard</h1>
                 </div>
 
                 <!-- Login Form -->
