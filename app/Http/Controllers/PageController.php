@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
     public function takeAttendencePage(){
-        return view('Attendence');
+        return view('attendence');
     }
     public function newWorkmenPage(){
-        return view('welcome');
+        return view('new-workmen');
     }
     public function reportsPage(){
         return view('reports');
     }
     public function sitePage(){
-        return view('site');
+        return view('locations');
     }
     public function dashboard(){
         return view('dashboard');

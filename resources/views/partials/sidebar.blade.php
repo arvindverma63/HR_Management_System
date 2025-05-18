@@ -14,6 +14,8 @@
          <a href="{{ route('new-workmen') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-workmen') ? 'bg-blue-950' : '' }}">New
              Workmen Form</a>
+         <a href="{{ route('workmen') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('workmen') ? 'bg-blue-950' : '' }}">Workmen</a>
          <a href="{{ route('attendence') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('attendence') ? 'bg-blue-950' : '' }}">Take
              Attendance</a>

@@ -3,8 +3,7 @@
 @include('partials.head')
 <body class="bg-gradient-to-br from-gray-50 to-gray-200 font-sans antialiased">
   <div class="flex min-h-screen">
-    <!-- Sidebar -->
-@include('partials.sidebar')
+    @include('partials.sidebar')
 
     <!-- Main Content -->
     <div class="flex-1 p-4 md:p-8 w-full">
@@ -15,7 +14,8 @@
         </svg>
       </button>
 
-@include('partials.header')
+      @include('partials.header')
+
       <!-- Dashboard Section -->
       <section id="dashboard">
         <div class="space-y-8">
@@ -24,14 +24,26 @@
             <!-- Total Employees -->
             <div class="bg-white p-6 rounded-2xl shadow-lg transform hover:scale-[1.02] transition-all">
               <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Employees</h3>
-              <p class="text-3xl font-bold text-custom-blue">150</p>
-              <p class="text-sm text-gray-500 mt-1">+5 this month</p>
+              <p class="text-3xl font-bold text-custom-blue">{{ $totalEmployees }}</p>
+              <p class="text-sm text-gray-500 mt-1">
+                @if($employeesThisMonth > 0)
+                    +{{ $employeesThisMonth }} this month
+                @else
+                    No new employees this month
+                @endif
+              </p>
             </div>
             <!-- Total Locations -->
             <div class="bg-white p-6 rounded-2xl shadow-lg transform hover:scale-[1.02] transition-all">
               <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Locations</h3>
-              <p class="text-3xl font-bold text-custom-blue">2</p>
-              <p class="text-sm text-gray-500 mt-1">Last added: Main Office</p>
+              <p class="text-3xl font-bold text-custom-blue">{{ $totalLocations }}</p>
+              <p class="text-sm text-gray-500 mt-1">
+                @if($lastLocation)
+                    Last added: {{ $lastLocation->name }}
+                @else
+                    No locations added yet
+                @endif
+              </p>
             </div>
             <!-- Today's Attendance -->
             <div class="bg-white p-6 rounded-2xl shadow-lg transform hover:scale-[1.02] transition-all">
@@ -39,15 +51,15 @@
               <div class="flex space-x-4">
                 <div>
                   <p class="text-sm text-gray-600">Present</p>
-                  <p class="text-xl font-bold text-green-600">100</p>
+                  <p class="text-xl font-bold text-green-600">{{ $attendance['present'] }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600">Absent</p>
-                  <p class="text-xl font-bold text-red-600">30</p>
+                  <p class="text-xl font-bold text-red-600">{{ $attendance['absent'] }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-600">Leave</p>
-                  <p class="text-xl font-bold text-yellow-600">20</p>
+                  <p class="text-xl font-bold text-yellow-600">{{ $attendance['leave'] }}</p>
                 </div>
               </div>
             </div>
@@ -78,24 +90,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="border-b hover:bg-gray-50 transition-all">
-                    <td class="p-2 md:p-4">Location Added</td>
-                    <td class="p-2 md:p-4">Main Office in Mumbai</td>
-                    <td class="p-2 md:p-4">Admin</td>
-                    <td class="p-2 md:p-4">2025-05-18 13:30</td>
-                  </tr>
-                  <tr class="border-b hover:bg-gray-50 transition-all">
-                    <td class="p-2 md:p-4">Attendance Submitted</td>
-                    <td class="p-2 md:p-4">For 2025-05-16</td>
-                    <td class="p-2 md:p-4">Admin</td>
-                    <td class="p-2 md:p-4">2025-05-16 09:00</td>
-                  </tr>
-                  <tr class="border-b hover:bg-gray-50 transition-all">
-                    <td class="p-2 md:p-4">New Workmen Added</td>
-                    <td class="p-2 md:p-4">John Doe</td>
-                    <td class="p-2 md:p-4">Admin</td>
-                    <td class="p-2 md:p-4">2025-05-15 14:20</td>
-                  </tr>
+                  @forelse ($recentActivities as $activity)
+                    <tr class="border-b hover:bg-gray-50 transition-all">
+                      <td class="p-2 md:p-4">{{ $activity->action }}</td>
+                      <td class="p-2 md:p-4">{{ $activity->details }}</td>
+                      <td class="p-2 md:p-4">{{ $activity->user }}</td>
+                      <td class="p-2 md:p-4">{{ $activity->created_at->format('Y-m-d H:i') }}</td>
+                    </tr>
+                  @empty
+                    <tr>
+                      <td colspan="4" class="p-2 md:p-4 text-center text-gray-500">No recent activities.</td>
+                    </tr>
+                  @endforelse
                 </tbody>
               </table>
             </div>
@@ -105,6 +111,6 @@
     </div>
   </div>
 
-@include('partials.js')
+  @include('partials.js')
 </body>
 </html>

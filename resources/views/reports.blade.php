@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 @include('partials.head')
@@ -17,25 +18,35 @@
             </button>
 
             @include('partials.header')
+
             <!-- Reports Section -->
             <section id="reports">
                 <div class="space-y-8">
                     <!-- Date Filter -->
-                    <div
-                        class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6 space-y-4 md:space-y-0">
-                        <div class="w-full md:w-auto">
-                            <label for="report-date" class="block text-sm font-medium text-gray-700">Select Date</label>
-                            <input type="date" id="report-date"
-                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                value="2025-05-16">
-                        </div>
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6 space-y-4 md:space-y-0">
+                        <form method="GET" action="{{ route('reports') }}" class="w-full md:w-auto">
+                            <div>
+                                <label for="report-date" class="block text-sm font-medium text-gray-700">Select Date</label>
+                                <input type="date" id="report-date" name="date" value="{{ $date }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    onchange="this.form.submit()">
+                            </div>
+                        </form>
                         <div class="flex space-x-4 w-full md:w-auto">
-                            <button id="download-pdf"
-                                class="w-full md:w-auto px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-custom-blue-dark transition-all">Download
-                                PDF</button>
-                            <button id="download-csv"
-                                class="w-full md:w-auto px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-custom-blue-dark transition-all">Download
-                                CSV</button>
+                            <form method="GET" action="{{ route('reports.download-pdf') }}">
+                                <input type="hidden" name="date" value="{{ $date }}">
+                                <button id="download-pdf"
+                                    class="w-full md:w-auto px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-custom-blue-dark transition-all">
+                                    Download PDF
+                                </button>
+                            </form>
+                            <form method="GET" action="{{ route('reports.download-csv') }}">
+                                <input type="hidden" name="date" value="{{ $date }}">
+                                <button id="download-csv"
+                                    class="w-full md:w-auto px-4 py-2 bg-custom-blue text-white rounded-lg hover:bg-custom-blue-dark transition-all">
+                                    Download CSV
+                                </button>
+                            </form>
                         </div>
                     </div>
 
@@ -68,27 +79,19 @@
                                     </tr>
                                 </thead>
                                 <tbody id="attendance-records">
-                                    <tr class="border-b hover:bg-gray-50 transition-all">
-                                        <td class="p-2 md:p-4">John Doe</td>
-                                        <td class="p-2 md:p-4">IT</td>
-                                        <td class="p-2 md:p-4">Present</td>
-                                        <td class="p-2 md:p-4">On time</td>
-                                        <td class="p-2 md:p-4">2025-05-16</td>
-                                    </tr>
-                                    <tr class="border-b hover:bg-gray-50 transition-all">
-                                        <td class="p-2 md:p-4">Jane Smith</td>
-                                        <td class="p-2 md:p-4">HR</td>
-                                        <td class="p-2 md:p-4">Absent</td>
-                                        <td class="p-2 md:p-4">Sick leave</td>
-                                        <td class="p-2 md:p-4">2025-05-16</td>
-                                    </tr>
-                                    <tr class="border-b hover:bg-gray-50 transition-all">
-                                        <td class="p-2 md:p-4">Mike Johnson</td>
-                                        <td class="p-2 md:p-4">Finance</td>
-                                        <td class="p-2 md:p-4">Leave</td>
-                                        <td class="p-2 md:p-4">Vacation</td>
-                                        <td class="p-2 md:p-4">2025-05-16</td>
-                                    </tr>
+                                    @forelse ($attendances as $attendance)
+                                        <tr class="border-b hover:bg-gray-50 transition-all">
+                                            <td class="p-2 md:p-4">{{ $attendance->workman->name }} {{ $attendance->workman->surname }}</td>
+                                            <td class="p-2 md:p-4">{{ $attendance->workman->designation ?? 'N/A' }}</td>
+                                            <td class="p-2 md:p-4">{{ ucfirst($attendance->status) }}</td>
+                                            <td class="p-2 md:p-4">{{ $attendance->notes ?? '' }}</td>
+                                            <td class="p-2 md:p-4">{{ $attendance->attendance_date->format('Y-m-d') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="p-2 md:p-4 text-center text-gray-500">No attendance records found for this date.</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -98,8 +101,63 @@
         </div>
     </div>
 
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Attendance Status Chart (Bar Chart)
+        const attendanceCtx = document.getElementById('attendanceStatusChart').getContext('2d');
+        new Chart(attendanceCtx, {
+            type: 'bar',
+            data: {
+                labels: @json($attendanceChartData['labels']),
+                datasets: [{
+                    label: 'Attendance',
+                    data: @json($attendanceChartData['data']),
+                    backgroundColor: ['#22C55E', '#EF4444', '#F59E0B'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Department Distribution Chart (Pie Chart)
+        const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+        new Chart(departmentCtx, {
+            type: 'pie',
+            data: {
+                labels: @json($departmentChartData['labels']),
+                datasets: [{
+                    label: 'Departments',
+                    data: @json($departmentChartData['data']),
+                    backgroundColor: ['#3B82F6', '#10B981', '#F59E0B'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+
+    @include('partials.js')
 </body>
-
-@include('partials.js')
-
 </html>

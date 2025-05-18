@@ -7,6 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <style>
+
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
