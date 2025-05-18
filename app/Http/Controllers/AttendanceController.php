@@ -33,7 +33,7 @@ class AttendanceController extends Controller
         // Check if attendance has already been submitted for the selected date
         $attendanceExists = Attendance::where('attendance_date', $date)->exists();
 
-        return view('attendence', compact('workmen', 'date', 'search', 'attendanceExists'));
+        return view('attendance', compact('workmen', 'date', 'search', 'attendanceExists'));
     }
 
     /**
