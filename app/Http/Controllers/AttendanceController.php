@@ -40,6 +40,7 @@ class AttendanceController extends Controller
      * Store the attendance records.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
