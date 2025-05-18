@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PageController;
@@ -21,31 +22,39 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 
-Route::get('/',function(){
-    return view('auth');
-})->name('login');
-Route::get('/sites',[PageController::class,'sitePage'])->name('locations');
-
-Route::get('/locations', [LocationController::class, 'index'])->name('locations');
-Route::post('/locations', [LocationController::class, 'store'])->name('locations.store');
-Route::get('/locations/{location}/edit', [LocationController::class, 'edit'])->name('locations.edit');
-Route::put('/locations/{location}', [LocationController::class, 'update'])->name('locations.update');
-Route::delete('/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
-
-Route::get('/workmen', [WorkmanController::class, 'index'])->name('workmen');
-Route::get('/new-workmen', [WorkmanController::class, 'create'])->name('new-workmen');
-Route::post('/workmen', [WorkmanController::class, 'store'])->name('new-workmen.store');
-Route::get('/workmen/{workman}/edit', [WorkmanController::class, 'edit'])->name('workmen.edit');
-Route::put('/workmen/{workman}', [WorkmanController::class, 'update'])->name('workmen.update');
-Route::delete('/workmen/{workman}', [WorkmanController::class, 'destroy'])->name('workmen.destroy');
-Route::get('/workmen/{workman}/download-pdf', [WorkmanController::class, 'downloadPdf'])->name('workmen.download-pdf');
-
-Route::get('/attendence', [AttendanceController::class, 'index'])->name('attendence');
-Route::post('/attendence', [AttendanceController::class, 'store'])->name('attendence.store');
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [AuthController::class, 'showProfileForm'])->name('profile');
+    Route::post('/profile/update-email', [AuthController::class, 'updateEmail'])->name('profile.update-email');
+    Route::post('/profile/update-password', [AuthController::class, 'updatePassword'])->name('profile.update-password');
 
-Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
-Route::get('/reports/download-pdf', [ReportsController::class, 'downloadPdf'])->name('reports.download-pdf');
-Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
+    Route::get('/sites', [PageController::class, 'sitePage'])->name('locations');
+
+    Route::get('/locations', [LocationController::class, 'index'])->name('locations');
+    Route::post('/locations', [LocationController::class, 'store'])->name('locations.store');
+    Route::get('/locations/{location}/edit', [LocationController::class, 'edit'])->name('locations.edit');
+    Route::put('/locations/{location}', [LocationController::class, 'update'])->name('locations.update');
+    Route::delete('/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
+
+    Route::get('/workmen', [WorkmanController::class, 'index'])->name('workmen');
+    Route::get('/new-workmen', [WorkmanController::class, 'create'])->name('new-workmen');
+    Route::post('/workmen', [WorkmanController::class, 'store'])->name('new-workmen.store');
+    Route::get('/workmen/{workman}/edit', [WorkmanController::class, 'edit'])->name('workmen.edit');
+    Route::put('/workmen/{workman}', [WorkmanController::class, 'update'])->name('workmen.update');
+    Route::delete('/workmen/{workman}', [WorkmanController::class, 'destroy'])->name('workmen.destroy');
+    Route::get('/workmen/{workman}/download-pdf', [WorkmanController::class, 'downloadPdf'])->name('workmen.download-pdf');
+
+    Route::get('/attendence', [AttendanceController::class, 'index'])->name('attendence');
+    Route::post('/attendence', [AttendanceController::class, 'store'])->name('attendence.store');
+
+
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
+    Route::get('/reports/download-pdf', [ReportsController::class, 'downloadPdf'])->name('reports.download-pdf');
+    Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
+});

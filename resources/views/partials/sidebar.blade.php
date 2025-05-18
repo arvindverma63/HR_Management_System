@@ -23,9 +23,17 @@
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('reports') ? 'bg-blue-950' : '' }}">Reports</a>
          <a href="{{ route('locations') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('locations') ? 'bg-blue-950' : '' }}">Locations</a>
+
+        <a href="{{ route('profile') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('profile') ? 'bg-blue-950' : '' }}">Profile</a>
+
+         <form method="POST" action="{{ route('logout') }}">
+             @csrf
+             <button type="submit"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all">
+                 Logout
+             </button>
+         </form>
      </nav>
 
-     <div class="p-4 md:p-6">
-         <button class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-all">Logout</button>
-     </div>
  </div>

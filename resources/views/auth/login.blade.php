@@ -13,8 +13,20 @@
                     <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">Admin Dashboard</h1>
                 </div>
 
+                <!-- Success/Error Messages -->
+                @if (session('success'))
+                    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <!-- Login Form -->
-                <form method="get" action="/dashboard" class="space-y-6">
+                <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
 
                     <!-- Email Field -->
@@ -53,17 +65,16 @@
 
                 <!-- Additional Links -->
                 <div class="mt-6 text-center">
-                    <a href="" class="text-sm text-custom-blue hover:underline">Forgot your password?</a>
+                    <a href="#" class="text-sm text-custom-blue hover:underline">Forgot your password?</a>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="mt-6 text-center text-gray-600 text-sm">
-            <p>Friday, May 16, 2025 | 11:30 PM IST</p>
+            <p>Sunday, May 18, 2025 | 11:05 PM IST</p>
         </div>
     </div>
 </body>
 @include('partials.js')
-
 </html>
