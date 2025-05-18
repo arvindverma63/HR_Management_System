@@ -9,6 +9,8 @@
          </button>
      </div>
      <nav class="flex-1">
+         <a href="{{ route('dashboard') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-950' : '' }}">Dashboard</a>
          <a href="{{ route('new-workmen') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-workmen') ? 'bg-blue-950' : '' }}">New
              Workmen Form</a>
@@ -17,7 +19,8 @@
              Attendance</a>
          <a href="{{ route('reports') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('reports') ? 'bg-blue-950' : '' }}">Reports</a>
-
+         <a href="{{ route('locations') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('locations') ? 'bg-blue-950' : '' }}">Locations</a>
      </nav>
 
      <div class="p-4 md:p-6">

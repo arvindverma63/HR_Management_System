@@ -15,4 +15,10 @@ class PageController extends Controller
     public function reportsPage(){
         return view('reports');
     }
+    public function sitePage(){
+        return view('site');
+    }
+    public function dashboard(){
+        return view('dashboard');
+    }
 }
