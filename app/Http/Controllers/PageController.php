@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function takeAttendencePage(){
-        return view('attendence');
-    }
     public function newWorkmenPage(){
         return view('new-workmen');
     }
