@@ -14,7 +14,7 @@
                 </div>
 
                 <!-- Login Form -->
-                <form method="get" action="/new-workmen" class="space-y-6">
+                <form method="get" action="/dashboard" class="space-y-6">
                     @csrf
 
                     <!-- Email Field -->
