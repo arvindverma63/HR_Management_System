@@ -167,6 +167,14 @@
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                 <div>
+                                    <label for="hourly_pay" class="block text-sm font-medium text-gray-700">Hourly Pay</label>
+                                    <input type="number" id="qualification" name="hourly_pay" value="{{ old('hourly_pay') }}" class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all" placeholder="Enter qualification">
+                                    @error('hourly_pay')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 

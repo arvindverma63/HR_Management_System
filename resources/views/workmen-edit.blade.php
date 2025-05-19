@@ -123,6 +123,13 @@
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                     step="0.01">
                             </div>
+
+                              <div>
+                                <label for="hourly_pay" class="block text-sm font-medium text-gray-700">Hourly Rate</label>
+                                <input type="number" id="monthly_rate" name="hourly_pay" value="{{ $workman->hourly_pay }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
                             <div>
                                 <label for="handicapped" class="block text-sm font-medium text-gray-700">Handicapped</label>
                                 <select id="handicapped" name="handicapped"
