@@ -21,8 +21,8 @@
              Attendance</a>
          <a href="{{ route('reports') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('reports') ? 'bg-blue-950' : '' }}">Reports</a>
-         <a href="{{ route('locations') }}"
-             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('locations') ? 'bg-blue-950' : '' }}">Locations</a>
+         <a href="{{ route('locations.index') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('locations.index') ? 'bg-blue-950' : '' }}">Locations</a>
 
         <a href="{{ route('profile') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('profile') ? 'bg-blue-950' : '' }}">Profile</a>

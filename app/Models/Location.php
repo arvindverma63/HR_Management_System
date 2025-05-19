@@ -20,5 +20,7 @@ class Location extends Model
         'city',
         'state',
         'contact_number',
+        'start_shift_time',
+        'end_shift_time',
     ];
 }

@@ -12,9 +12,6 @@ class PageController extends Controller
     public function reportsPage(){
         return view('reports');
     }
-    public function sitePage(){
-        return view('locations');
-    }
     public function dashboard(){
         return view('dashboard');
     }

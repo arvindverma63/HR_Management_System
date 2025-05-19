@@ -3,7 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WorkmanController;
@@ -27,6 +27,11 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [AuthController::class, 'showProfileForm'])->name('profile');
     Route::post('/profile/update-email', [AuthController::class, 'updateEmail'])->name('profile.update-email');
@@ -34,11 +39,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/sites', [PageController::class, 'sitePage'])->name('locations');
 
-    Route::get('/locations', [LocationController::class, 'index'])->name('locations');
-    Route::post('/locations', [LocationController::class, 'store'])->name('locations.store');
-    Route::get('/locations/{location}/edit', [LocationController::class, 'edit'])->name('locations.edit');
-    Route::put('/locations/{location}', [LocationController::class, 'update'])->name('locations.update');
-    Route::delete('/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
+     Route::get('/locations', [LocationsController::class, 'index'])->name('locations.index');
+    Route::post('/locations', [LocationsController::class, 'store'])->name('locations.store');
+    Route::put('/locations/{location}', [LocationsController::class, 'update'])->name('locations.update');
+    Route::delete('/locations/{location}', [LocationsController::class, 'destroy'])->name('locations.destroy');
 
     Route::get('/workmen', [WorkmanController::class, 'index'])->name('workmen');
     Route::get('/new-workmen', [WorkmanController::class, 'create'])->name('new-workmen');
