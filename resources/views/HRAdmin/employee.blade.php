@@ -63,16 +63,16 @@
                                         <td class="p-2 md:p-4">{{ $workman->designation ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4">{{ $workman->location->name ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4 flex space-x-2">
-                                            <a href="{{ route('workmen.edit', $workman) }}"
+                                            <a href="{{ route('employee.edit', $workman) }}"
                                                 class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">Edit</a>
-                                            <form action="{{ route('workmen.destroy', $workman) }}" method="POST"
+                                            <form action="{{ route('employee.destroy', $workman) }}" method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this workman?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
                                                     class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">Delete</button>
                                             </form>
-                                            <a href="{{ route('workmen.download-pdf', $workman) }}"
+                                            <a href="{{ route('employee.download-pdf', $workman) }}"
                                                 class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download PDF</a>
                                         </td>
                                     </tr>

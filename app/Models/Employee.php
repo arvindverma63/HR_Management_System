@@ -9,6 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
 
+    protected $table = 'employees';
     protected $fillable = [
         'location_id',
         'name',
@@ -49,20 +50,14 @@ class Employee extends Model
         'hourly_pay',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
+
     protected $casts = [
         'dob' => 'date',
         'pmsby_start_date' => 'date',
         'handicapped' => 'boolean',
     ];
 
-    /**
-     * Get the location that the workman belongs to.
-     */
+
     public function location()
     {
         return $this->belongsTo(Location::class);
