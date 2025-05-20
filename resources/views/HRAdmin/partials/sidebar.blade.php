@@ -13,6 +13,8 @@
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Employee</a>
          <a href="{{ route('new-employee') }}"
              class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-employee') ? 'bg-blue-950' : '' }}">New Employee</a>
+          <a href="{{ route('EmployeeAttendence') }}"
+             class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('EmployeeAttendence') ? 'bg-blue-950' : '' }}">Take Attendence</a>
          <form method="POST" action="{{ route('logout') }}">
              @csrf
              <button type="submit"

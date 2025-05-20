@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeAttendenceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
@@ -71,3 +72,7 @@ Route::get('/employee/{employee}/edit', [EmployeeController::class, 'edit'])->na
 Route::put('/employee/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
 Route::delete('/employee/{employee}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 Route::get('/employee/{employee}/download-pdf', [EmployeeController::class, 'downloadPdf'])->name('employee.download-pdf');
+
+
+Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
+Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
