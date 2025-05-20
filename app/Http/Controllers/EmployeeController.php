@@ -22,7 +22,7 @@ class EmployeeController extends Controller
             })
             ->paginate(10);
 
-        return view('hradmin.employee', compact('workmen', 'search'));
+        return view('HRAdmin.employee', compact('workmen', 'search'));
     }
 
     public function create()
