@@ -3,7 +3,7 @@
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-200 font-sans antialiased">
     <div class="flex min-h-screen">
-        @include('HRAdmmin.partials.sidebar')
+        @include('HRAdmin.partials.sidebar')
 
         <!-- Main Content -->
         <div class="flex-1 p-4 md:p-8 w-full">
@@ -14,7 +14,7 @@
                 </svg>
             </button>
 
-            @include('HRAdmin.partials.header')
+            @include('partials.header')
 
             <!-- New Workmen Joining & Screening Form -->
             <section id="new-workmen">
@@ -28,7 +28,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('employee.store') }}" class="grid grid-cols-1 gap-4 md:gap-6">
+                    <form method="POST" action="{{ route('new-employee.store') }}" class="grid grid-cols-1 gap-4 md:gap-6">
                         @csrf
                         <!-- Location Selection -->
                         <div class="border-b pb-4">
