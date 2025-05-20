@@ -3,7 +3,7 @@
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-200 font-sans antialiased">
     <div class="flex min-h-screen">
-        @include('partials.sidebar')
+        @include('HRAdmmin.partials.sidebar')
 
         <!-- Main Content -->
         <div class="flex-1 p-4 md:p-8 w-full">
@@ -14,12 +14,12 @@
                 </svg>
             </button>
 
-            @include('partials.header')
+            @include('HRAdmin.partials.header')
 
             <!-- New Workmen Joining & Screening Form -->
             <section id="new-workmen">
                 <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg transform hover:scale-[1.01] transition-all">
-                    <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-4 md:mb-6">New Workmen Joining & Screening Form</h3>
+                    <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-4 md:mb-6">New Employee Joining & Screening Form</h3>
 
                     <!-- Success Message -->
                     @if (session('success'))
@@ -28,7 +28,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('new-workmen.store') }}" class="grid grid-cols-1 gap-4 md:gap-6">
+                    <form method="POST" action="{{ route('employee.store') }}" class="grid grid-cols-1 gap-4 md:gap-6">
                         @csrf
                         <!-- Location Selection -->
                         <div class="border-b pb-4">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReportsController;
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/sites', [PageController::class, 'sitePage'])->name('locations');
 
-     Route::get('/locations', [LocationsController::class, 'index'])->name('locations.index');
+    Route::get('/locations', [LocationsController::class, 'index'])->name('locations.index');
     Route::post('/locations', [LocationsController::class, 'store'])->name('locations.store');
     Route::put('/locations/{location}', [LocationsController::class, 'update'])->name('locations.update');
     Route::delete('/locations/{location}', [LocationsController::class, 'destroy'])->name('locations.destroy');
@@ -62,3 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/download-pdf', [ReportsController::class, 'downloadPdf'])->name('reports.download-pdf');
     Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
 });
+
+Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
+Route::get('/new-employee', [WorkmanController::class, 'create'])->name('new-employee');
+Route::post('/employee', [WorkmanController::class, 'store'])->name('new-employee.store');

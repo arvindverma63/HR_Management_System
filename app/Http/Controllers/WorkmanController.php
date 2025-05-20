@@ -86,6 +86,7 @@ class WorkmanController extends Controller
             'nominee_address' => 'nullable|string',
             'nominee_relation' => 'nullable|string|max:255',
             'nominee_phone' => 'nullable|string|max:15',
+            'hourly_pay' => 'nullable|numeric',
         ]);
 
         $workman = Workman::create($validated);
