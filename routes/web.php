@@ -34,7 +34,7 @@ Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm']
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/profile', [AuthController::class, 'showProfileForm'])->name('profile');
     Route::post('/profile/update-email', [AuthController::class, 'updateEmail'])->name('profile.update-email');
     Route::post('/profile/update-password', [AuthController::class, 'updatePassword'])->name('profile.update-password');
@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
 });
 
+Route::middleware(['auth','role:hr'])->group(function () {
 Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
 Route::get('/new-employee', [EmployeeController::class, 'create'])->name('new-employee');
 Route::post('/employee', [EmployeeController::class, 'store'])->name('new-employee.store');
@@ -76,3 +77,4 @@ Route::get('/employee/{employee}/download-pdf', [EmployeeController::class, 'dow
 
 Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
 Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
+});

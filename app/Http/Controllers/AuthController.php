@@ -35,13 +35,24 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard')->with('success', 'Logged in successfully!');
+
+            $user = Auth::user();
+
+            // Role-based redirection
+            if ($user->role === 'admin') {
+                return redirect()->route('dashboard')->with('success', 'Welcome Admin!');
+            } elseif ($user->role === 'hr') {
+                return redirect()->route('employee.index')->with('success', 'Welcome HR!');
+            } else {
+                return redirect()->route('employee.index')->with('success', 'Logged in successfully!');
+            }
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
+
 
     /**
      * Log the user out.

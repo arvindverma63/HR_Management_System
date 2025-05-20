@@ -52,6 +52,7 @@ class Workman extends Model
         'nominee_relation',
         'nominee_phone',
         'hourly_pay',
+        'email',
     ];
 
     /**

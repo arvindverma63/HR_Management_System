@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Workman;
 use App\Models\Location;
 use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Hash;
 
 class WorkmanController extends Controller
 {
@@ -22,8 +24,8 @@ class WorkmanController extends Controller
         $workmen = Workman::with('location')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('surname', 'like', "%{$search}%")
-                      ->orWhere('designation', 'like', "%{$search}%");
+                    ->orWhere('surname', 'like', "%{$search}%")
+                    ->orWhere('designation', 'like', "%{$search}%");
             })
             ->paginate(10);
 
@@ -87,9 +89,18 @@ class WorkmanController extends Controller
             'nominee_relation' => 'nullable|string|max:255',
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
+            'email' => 'required|email',
         ]);
 
         $workman = Workman::create($validated);
+        if ($workman) {
+            User::create([
+                'name' => $workman->name,
+                'email' => $workman->email,
+                'password' => Hash::make($workman->mobile_number),
+                'role' => 'hr',
+            ]);
+        }
 
         // Log the activity
         ActivityLog::create([
@@ -160,6 +171,7 @@ class WorkmanController extends Controller
             'nominee_relation' => 'nullable|string|max:255',
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
+            'email'=> 'required|email',
         ]);
 
         $workman->update($validated);
@@ -184,6 +196,11 @@ class WorkmanController extends Controller
     {
         $workmanName = "{$workman->name} {$workman->surname}";
         $workman->delete();
+
+        if($workman){
+            $user = User::where('email',$workman->email)->first();
+            $user->delete();
+        }
 
         // Log the activity
         ActivityLog::create([

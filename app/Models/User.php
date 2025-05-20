@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
 }
