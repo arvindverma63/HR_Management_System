@@ -148,10 +148,10 @@ class EmployeeController extends Controller
     }
 
 
-    public function destroy(Employee $workman)
+    public function destroy(Employee $employee)
     {
-        $workmanName = "{$workman->name} {$workman->surname}";
-        $workman->delete();
+        $workmanName = "{$employee->name} {$employee->surname}";
+        $employee->delete();
 
         // Log the activity
         ActivityLog::create([
@@ -167,7 +167,7 @@ class EmployeeController extends Controller
     public function downloadPdf(Employee $employee)
     {
         $employee->load('location');
-        $pdf = Pdf::loadView('employee.pdf', compact('employee'));
+        $pdf = Pdf::loadView('HRAdmin.employee.pdf', compact('employee'));
         return $pdf->download("workman-details-{$employee->id}.pdf");
     }
 }
