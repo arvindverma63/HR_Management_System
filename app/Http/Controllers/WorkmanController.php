@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Workman;
 use App\Models\Location;
 use App\Models\ActivityLog;
+use App\Models\Designation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -20,7 +21,6 @@ class WorkmanController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search', '');
-
         $workmen = Workman::with('location')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
@@ -40,7 +40,8 @@ class WorkmanController extends Controller
     public function create()
     {
         $locations = Location::all();
-        return view('new-workmen', compact('locations'));
+        $designations = Designation::all();
+        return view('new-workmen', compact('locations', 'designations'));
     }
 
     /**
@@ -121,7 +122,8 @@ class WorkmanController extends Controller
     public function edit(Workman $workman)
     {
         $locations = Location::all();
-        return view('workmen-edit', compact('workman', 'locations'));
+        $designations = Designation::all();
+        return view('workmen-edit', compact('workman', 'locations', 'designations'));
     }
 
     /**
@@ -140,7 +142,7 @@ class WorkmanController extends Controller
             'sex' => 'nullable|in:male,female',
             'dob' => 'nullable|date',
             'blood_group' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-            'designation' => 'nullable|in:HSW,SSW,USW',
+            'designation' => 'nullable',
             'monthly_rate' => 'nullable|numeric|min:0',
             'handicapped' => 'nullable|boolean',
             'pan_number' => 'nullable|string|max:10',
@@ -171,7 +173,7 @@ class WorkmanController extends Controller
             'nominee_relation' => 'nullable|string|max:255',
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
-            'email'=> 'required|email',
+            'email' => 'required|email',
         ]);
 
         $workman->update($validated);
@@ -197,8 +199,8 @@ class WorkmanController extends Controller
         $workmanName = "{$workman->name} {$workman->surname}";
         $workman->delete();
 
-        if($workman){
-            $user = User::where('email',$workman->email)->first();
+        if ($workman) {
+            $user = User::where('email', $workman->email)->first();
             $user->delete();
         }
 

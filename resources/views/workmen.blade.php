@@ -40,8 +40,7 @@
                         <form method="GET" action="{{ route('workmen') }}">
                             <input type="text" id="search" name="search" value="{{ $search }}"
                                 class="w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                placeholder="Search workmen by name or department..."
-                                oninput="this.form.submit()">
+                                placeholder="Search workmen by name or department..." oninput="this.form.submit()">
                         </form>
                     </div>
 
@@ -60,7 +59,10 @@
                                 @forelse ($workmen as $workman)
                                     <tr class="border-b hover:bg-gray-50 transition-all">
                                         <td class="p-2 md:p-4">{{ $workman->name }} {{ $workman->surname }}</td>
-                                        <td class="p-2 md:p-4">{{ $workman->designation ?? 'N/A' }}</td>
+                                        <td class="p-2 md:p-4">
+                                            {{ \App\Models\Designation::where('id', $workman->designation)->value('name') }}
+                                        </td>
+
                                         <td class="p-2 md:p-4">{{ $workman->location->name ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4 flex space-x-2">
                                             <a href="{{ route('workmen.edit', $workman) }}"
@@ -73,12 +75,14 @@
                                                     class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">Delete</button>
                                             </form>
                                             <a href="{{ route('workmen.download-pdf', $workman) }}"
-                                                class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download PDF</a>
+                                                class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download
+                                                PDF</a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="p-2 md:p-4 text-center text-gray-500">No workmen found.</td>
+                                        <td colspan="4" class="p-2 md:p-4 text-center text-gray-500">No workmen
+                                            found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -86,10 +90,12 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 md:mt-6 space-y-4 md:space-y-0">
+                    <div
+                        class="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 md:mt-6 space-y-4 md:space-y-0">
                         <div>
                             <span class="text-gray-600 text-sm md:text-base">
-                                Showing {{ $workmen->firstItem() }} to {{ $workmen->lastItem() }} of {{ $workmen->total() }} entries
+                                Showing {{ $workmen->firstItem() }} to {{ $workmen->lastItem() }} of
+                                {{ $workmen->total() }} entries
                             </span>
                         </div>
                         <div class="flex space-x-2">
@@ -103,4 +109,5 @@
 
     @include('partials.js')
 </body>
+
 </html>

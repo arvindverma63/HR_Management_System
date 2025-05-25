@@ -132,12 +132,12 @@
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
                                     <option value="" {{ is_null($workman->designation) ? 'selected' : '' }}>
                                         Select</option>
-                                    <option value="HSW" {{ $workman->designation == 'HSW' ? 'selected' : '' }}>HSW
-                                    </option>
-                                    <option value="SSW" {{ $workman->designation == 'SSW' ? 'selected' : '' }}>SSW
-                                    </option>
-                                    <option value="USW" {{ $workman->designation == 'USW' ? 'selected' : '' }}>USW
-                                    </option>
+                                    @foreach ($designations as $d)
+                                        <option value="{{ $d->id }}"
+                                            {{ old('designation') == $d->id ? 'selected' : '' }}>
+                                            {{ $d->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

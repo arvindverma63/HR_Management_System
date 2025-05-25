@@ -145,12 +145,13 @@
                                     <select id="designation" name="designation"
                                         class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
                                         <option value="">Select Designation</option>
-                                        <option value="HSW" {{ old('designation') == 'HSW' ? 'selected' : '' }}>HSW
-                                        </option>
-                                        <option value="SSW" {{ old('designation') == 'SSW' ? 'selected' : '' }}>SSW
-                                        </option>
-                                        <option value="USW" {{ old('designation') == 'USW' ? 'selected' : '' }}>USW
-                                        </option>
+                                        @foreach ($designations as $d)
+                                            <option value="{{ $d->id }}"
+                                                {{ old('designation') == $d->id ? 'selected' : '' }}>
+                                                {{ $d->name }}
+                                            </option>
+                                        @endforeach
+
                                     </select>
                                     @error('designation')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
