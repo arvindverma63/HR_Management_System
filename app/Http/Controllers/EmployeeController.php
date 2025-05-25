@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\Employee;
 use App\Models\Location;
+use App\Models\Workman;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,6 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search', '');
-
         $workmen = Employee::with('location')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
@@ -144,7 +144,7 @@ class EmployeeController extends Controller
             'user' => 'Admin',
         ]);
 
-        return redirect()->route('HRAdmin.employee')->with('success', 'Employee updated successfully!');
+        return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
     }
 
 
