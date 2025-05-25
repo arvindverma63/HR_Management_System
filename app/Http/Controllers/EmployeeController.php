@@ -8,6 +8,7 @@ use App\Models\Location;
 use App\Models\Workman;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
@@ -27,7 +28,9 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        $locations = Location::all();
+        $userEmail = Auth::user()->email;
+        $locationId = Workman::select('location_id')->where('email',$userEmail)->first();
+        $locations = Location::find($locationId);
         return view('HRAdmin.new-employee', compact('locations'));
     }
 
@@ -88,7 +91,9 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee)
     {
-        $locations = Location::all();
+        $userEmail = Auth::user()->email;
+        $locationId = Workman::select('location_id')->where('email',$userEmail)->first();
+        $locations = Location::find($locationId);
         return view('HRAdmin.employee-edit', compact('employee', 'locations'));
     }
 
