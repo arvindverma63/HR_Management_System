@@ -51,7 +51,7 @@ class AttendanceController extends Controller
             'attendance.*.workman_id' => 'required|exists:workmen,id',
             'attendance.*.location_id' => 'required|exists:locations,id',
             'attendance.*.status' => 'required|in:present,absent,leave',
-            'attendance.*.notes' => 'nullable|string|max:500',
+            'attendance.*.overtime_hours' => 'nullable|string|max:500',
         ]);
 
         $attendanceDate = $validated['attendance_date'];
@@ -68,7 +68,7 @@ class AttendanceController extends Controller
                 'location_id' => $attendanceData['location_id'],
                 'attendance_date' => $attendanceDate,
                 'status' => $attendanceData['status'],
-                'notes' => $attendanceData['notes'],
+                'overtime_hours' => $attendanceData['overtime_hours'],
             ]);
         }
 

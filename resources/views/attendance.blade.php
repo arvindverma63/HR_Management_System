@@ -88,9 +88,9 @@
                                                     value="{{ $workman->location_id }}">
                                             </td>
                                             <td class="p-2 md:p-4">
-                                                <input type="text" name="attendance[{{ $workman->id }}][notes]"
+                                                <input type="text" name="attendance[{{ $workman->id }}][overtime_hours]"
                                                     class="p-1 md:p-2 border rounded-lg w-full focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                                    placeholder="Add notes..."
+                                                    placeholder="overtime_hours"
                                                     {{ $attendanceExists ? 'disabled' : '' }}>
                                             </td>
                                         </tr>

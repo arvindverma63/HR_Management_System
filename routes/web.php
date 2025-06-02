@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeAttendenceController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InternalsheetController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReportsController;
@@ -69,9 +70,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
     Route::get('/reports/download-pdf', [ReportsController::class, 'downloadPdf'])->name('reports.download-pdf');
     Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
+
+    Route::get('/hr_report',[InternalsheetController::class,'HRIndex'])->name('hr.report');
+    Route::post('/hr-report', [InternalsheetController::class, 'getHRReport'])->name('hr-report');
+
+
 });
 
-Route::middleware(['auth', 'role:hr'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('/new-employee', [EmployeeController::class, 'create'])->name('new-employee');
     Route::post('/employee', [EmployeeController::class, 'store'])->name('new-employee.store');
@@ -79,8 +85,6 @@ Route::middleware(['auth', 'role:hr'])->group(function () {
     Route::put('/employee/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
     Route::delete('/employee/{employee}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
     Route::get('/employee/{employee}/download-pdf', [EmployeeController::class, 'downloadPdf'])->name('employee.download-pdf');
-
-
     Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
     Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
 });

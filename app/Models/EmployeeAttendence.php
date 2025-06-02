@@ -22,4 +22,8 @@ class EmployeeAttendence extends Model
     {
         return $this->belongsTo(Location::class);
     }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
 }

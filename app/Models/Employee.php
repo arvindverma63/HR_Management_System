@@ -62,4 +62,6 @@ class Employee extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
+
 }
