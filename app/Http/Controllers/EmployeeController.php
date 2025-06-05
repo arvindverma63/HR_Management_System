@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\Location;
 use App\Models\Workman;
@@ -31,7 +32,8 @@ class EmployeeController extends Controller
         $userEmail = Auth::user()->email;
         $locationId = Workman::select('location_id')->where('email',$userEmail)->first();
         $locations = Location::find($locationId);
-        return view('HRAdmin.new-employee', compact('locations'));
+        $designations = Designation::all();
+        return view('HRAdmin.new-employee', compact('locations','designations'));
     }
 
     public function store(Request $request)
@@ -41,9 +43,10 @@ class EmployeeController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'sex' => 'nullable|in:male,female',
+            'refer_by' => 'nullable|string',
             'dob' => 'nullable|date',
             'blood_group' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-            'designation' => 'nullable|in:HSW,SSW,USW',
+            'designation' => 'integer|nullable',
             'monthly_rate' => 'nullable|numeric|min:0',
             'handicapped' => 'nullable|boolean',
             'pan_number' => 'nullable|string|max:10',
@@ -94,7 +97,8 @@ class EmployeeController extends Controller
         $userEmail = Auth::user()->email;
         $locationId = Workman::select('location_id')->where('email',$userEmail)->first();
         $locations = Location::find($locationId);
-        return view('HRAdmin.employee-edit', compact('employee', 'locations'));
+        $designations = Designation::all();
+        return view('HRAdmin.employee-edit', compact('employee', 'locations','designations'));
     }
 
 
@@ -105,9 +109,10 @@ class EmployeeController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'sex' => 'nullable|in:male,female',
+            'refer_by' => 'nullable|string',
             'dob' => 'nullable|date',
             'blood_group' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-            'designation' => 'nullable|in:HSW,SSW,USW',
+            'designation' => 'integer|nullable',
             'monthly_rate' => 'nullable|numeric|min:0',
             'handicapped' => 'nullable|boolean',
             'pan_number' => 'nullable|string|max:10',

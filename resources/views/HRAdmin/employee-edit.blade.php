@@ -77,7 +77,8 @@
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
                                     <option value="" {{ is_null($employee->sex) ? 'selected' : '' }}>Select
                                     </option>
-                                    <option value="male" {{ $employee->sex == 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="male" {{ $employee->sex == 'male' ? 'selected' : '' }}>Male
+                                    </option>
                                     <option value="female" {{ $employee->sex == 'female' ? 'selected' : '' }}>Female
                                     </option>
                                 </select>
@@ -118,19 +119,22 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="designation"
-                                    class="block text-sm font-medium text-gray-700">Designation</label>
+                                <label for="designation" class="block text-sm font-medium text-gray-700">Designation
+                                    (HSW/SSW/USW)</label>
                                 <select id="designation" name="designation"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
-                                    <option value="" {{ is_null($employee->designation) ? 'selected' : '' }}>
-                                        Select</option>
-                                    <option value="HSW" {{ $employee->designation == 'HSW' ? 'selected' : '' }}>HSW
-                                    </option>
-                                    <option value="SSW" {{ $employee->designation == 'SSW' ? 'selected' : '' }}>SSW
-                                    </option>
-                                    <option value="USW" {{ $employee->designation == 'USW' ? 'selected' : '' }}>USW
-                                    </option>
+                                    <option value="">Select Designation</option>
+                                    @foreach ($designations as $d)
+                                        <option value="{{ $d->id }}"
+                                            {{ old('designation') == $d->id ? 'selected' : '' }}>
+                                            {{ $d->name }}
+                                        </option>
+                                    @endforeach
+
                                 </select>
+                                @error('designation')
+                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -140,7 +144,7 @@
                                 <label for="monthly_rate" class="block text-sm font-medium text-gray-700">Monthly
                                     Rate</label>
                                 <input type="number" id="monthly_rate" name="monthly_rate"
-                                    value="{{ $employee->monthly_rate }}"
+                                    value="{{ $employee->monthly_rate }}" onkeyup="mothlyPay()"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                     step="0.01">
                             </div>
@@ -148,8 +152,8 @@
                             <div>
                                 <label for="hourly_pay" class="block text-sm font-medium text-gray-700">Hourly
                                     Rate</label>
-                                <input type="number" id="monthly_rate" name="hourly_pay"
-                                    value="{{ $employee->hourly_pay }}"
+                                <input type="number" id="hourly_pay" name="hourly_pay"
+                                    value="{{ $employee->hourly_pay }}" onkeyup="hourlyPay()"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                     step="0.01">
                             </div>
@@ -284,7 +288,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
                                 <label for="esic_no" class="block text-sm font-medium text-gray-700">ESIC No</label>
-                                <input type="text" id="esic_no" name="esic_no" value="{{ $employee->esic_no }}"
+                                <input type="text" id="esic_no" name="esic_no"
+                                    value="{{ $employee->esic_no }}"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
                             </div>
                             <div>
@@ -394,6 +399,16 @@
                                 class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
                         </div>
 
+                        <div>
+                            <label for="refer_by" class="block text-sm font-medium text-gray-700">Refer By</label>
+                            <input type="text" id="refer_by" name="refer_by" value="{{ old('refer_by') }}"
+                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                placeholder="Refer Bt">
+                            @error('refer_by')
+                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Submit Button -->
                         <button type="submit"
                             class="w-full bg-custom-blue text-white py-2 md:py-3 rounded-lg hover:bg-custom-blue-dark transition-all">
@@ -408,4 +423,18 @@
     @include('partials.js')
 </body>
 
+<script>
+    function hourlyPay() {
+        var hourlypay_rate = document.getElementById("hourly_pay").value;
+        console.log(hourlypay_rate);
+        document.getElementById("monthly_rate").value = hourlypay_rate * 8 * 28;
+    }
+
+    function mothlyPay() {
+        var monthly_rate = document.getElementById("monthly_rate").value;
+        console.log(monthly_rate);
+        document.getElementById("hourly_pay").value = (monthly_rate / 8 / 28).toFixed(2);
+
+    }
+</script>
 </html>

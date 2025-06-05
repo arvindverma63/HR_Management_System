@@ -161,7 +161,7 @@
                                     <label for="monthly_rate" class="block text-sm font-medium text-gray-700">Monthly
                                         Rate</label>
                                     <input type="number" id="monthly_rate" name="monthly_rate"
-                                        value="{{ old('monthly_rate') }}"
+                                        value="{{ old('monthly_rate') }}" onkeyup="mothlyPay()"
                                         class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                         placeholder="Enter monthly rate">
                                     @error('monthly_rate')
@@ -172,7 +172,7 @@
                                 <div>
                                     <label for="hourly_pay" class="block text-sm font-medium text-gray-700">Hourly
                                         Pay</label>
-                                    <input type="number" id="qualification" name="hourly_pay"
+                                    <input type="number" id="hourly_pay" name="hourly_pay" onkeyup="hourlyPay()"
                                         value="{{ old('hourly_pay') }}"
                                         class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                         placeholder="Enter qualification">
@@ -537,5 +537,20 @@
 
     @include('partials.js')
 </body>
+
+<script>
+    function hourlyPay() {
+        var hourlypay_rate = document.getElementById("hourly_pay").value;
+        console.log(hourlypay_rate);
+        document.getElementById("monthly_rate").value = hourlypay_rate * 8 * 28;
+    }
+
+    function mothlyPay() {
+        var monthly_rate = document.getElementById("monthly_rate").value;
+        console.log(monthly_rate);
+        document.getElementById("hourly_pay").value = (monthly_rate / 8 / 28).toFixed(2);
+
+    }
+</script>
 
 </html>

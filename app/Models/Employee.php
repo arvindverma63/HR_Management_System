@@ -48,6 +48,7 @@ class Employee extends Model
         'nominee_relation',
         'nominee_phone',
         'hourly_pay',
+        'refer_by',
     ];
 
 
@@ -62,6 +63,8 @@ class Employee extends Model
     {
         return $this->belongsTo(Location::class);
     }
-
-
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class, 'designation');
+    }
 }

@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-datatables@latest/dist/vanilla-dataTables.min.css">
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         /* Custom scrollbar */
         ::-webkit-scrollbar {
