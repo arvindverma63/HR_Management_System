@@ -221,6 +221,60 @@
                             </div>
                         </div>
 
+                                                <!-- Documents Information -->
+                        <div class="border-b pb-4">
+                            <h4 class="text-lg font-medium text-gray-700 mb-4">Documents Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                <!-- Aadhar File Upload -->
+                                <div>
+                                    <label for="aadhar_file"
+                                        class="block text-sm font-medium text-gray-700">Aadhar</label>
+                                    <input type="file" id="aadhar_file"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
+                                    <input type="hidden" name="aadhar" id="aadhar">
+                                    @error('aadhar')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- PAN Card Upload -->
+                                <div>
+                                    <label for="pancard_file" class="block text-sm font-medium text-gray-700">PAN
+                                        Card</label>
+                                    <input type="file" id="pancard_file"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
+                                    <input type="hidden" name="pancard" id="pancard">
+                                    @error('pancard')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Bank Statement Upload -->
+                                <div>
+                                    <label for="bank_statement_file"
+                                        class="block text-sm font-medium text-gray-700">Bank Statement</label>
+                                    <input type="file" id="bank_statement_file"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
+                                    <input type="hidden" name="bank_statement" id="bank_statement">
+                                    @error('bank_statement')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Passbook Upload -->
+                                <div>
+                                    <label for="passbook_file"
+                                        class="block text-sm font-medium text-gray-700">Passbook</label>
+                                    <input type="file" id="passbook_file"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
+                                    <input type="hidden" name="passbook" id="passbook">
+                                    @error('passbook')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Father Name and Permanent Address -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
@@ -436,5 +490,29 @@
         document.getElementById("hourly_pay").value = (monthly_rate / 8 / 28).toFixed(2);
 
     }
+</script>
+
+<!-- JavaScript to convert files to base64 -->
+<script>
+    function convertToBase64(inputId, hiddenId) {
+        const input = document.getElementById(inputId);
+        const hidden = document.getElementById(hiddenId);
+        input.addEventListener('change', function() {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    hidden.value = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Init for each document field
+    convertToBase64('aadhar_file', 'aadhar');
+    convertToBase64('pancard_file', 'pancard');
+    convertToBase64('bank_statement_file', 'bank_statement');
+    convertToBase64('passbook_file', 'passbook');
 </script>
 </html>

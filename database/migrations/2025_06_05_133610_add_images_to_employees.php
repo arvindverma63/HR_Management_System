@@ -12,6 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('employees', function (Blueprint $table) {
+            $table->longText('aadhar')->nullable();
+            $table->longText('pancard')->nullable();
+            $table->longText('bank_statement')->nullable();
+            $table->longText('passbook')->nullable();
         });
     }
 

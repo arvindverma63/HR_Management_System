@@ -10,6 +10,7 @@ use App\Models\Workman;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -19,8 +20,8 @@ class EmployeeController extends Controller
         $workmen = Employee::with('location')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('surname', 'like', "%{$search}%")
-                      ->orWhere('designation', 'like', "%{$search}%");
+                    ->orWhere('surname', 'like', "%{$search}%")
+                    ->orWhere('designation', 'like', "%{$search}%");
             })
             ->paginate(10);
 
@@ -30,10 +31,10 @@ class EmployeeController extends Controller
     public function create()
     {
         $userEmail = Auth::user()->email;
-        $locationId = Workman::select('location_id')->where('email',$userEmail)->first();
+        $locationId = Workman::select('location_id')->where('email', $userEmail)->first();
         $locations = Location::find($locationId);
         $designations = Designation::all();
-        return view('HRAdmin.new-employee', compact('locations','designations'));
+        return view('HRAdmin.new-employee', compact('locations', 'designations'));
     }
 
     public function store(Request $request)
@@ -77,6 +78,10 @@ class EmployeeController extends Controller
             'nominee_relation' => 'nullable|string|max:255',
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
+            'aadhar' => 'nullable|string',
+            'pancard' => 'nullable|string',
+            'bank_statement' => 'nullable|string',
+            'passbook' => 'nullable|string',
         ]);
 
         $workman = Employee::create($validated);
@@ -95,10 +100,10 @@ class EmployeeController extends Controller
     public function edit(Employee $employee)
     {
         $userEmail = Auth::user()->email;
-        $locationId = Workman::select('location_id')->where('email',$userEmail)->first();
+        $locationId = Workman::select('location_id')->where('email', $userEmail)->first();
         $locations = Location::find($locationId);
         $designations = Designation::all();
-        return view('HRAdmin.employee-edit', compact('employee', 'locations','designations'));
+        return view('HRAdmin.employee-edit', compact('employee', 'locations', 'designations'));
     }
 
 
@@ -143,18 +148,42 @@ class EmployeeController extends Controller
             'nominee_relation' => 'nullable|string|max:255',
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
+            'aadhar' => 'nullable|string',
+            'pancard' => 'nullable|string',
+            'bank_statement' => 'nullable|string',
+            'passbook' => 'nullable|string',
         ]);
 
-        $workman->update($validated);
+        try {
+            // Process Base64 fields: Optionally strip data URI prefix to store only Base64 content
+            $base64Fields = ['aadhar', 'pancard', 'bank_statement', 'passbook'];
+            foreach ($base64Fields as $field) {
+                if (isset($validated[$field]) && !empty($validated[$field])) {
+                    // Optionally strip the data URI prefix (e.g., "data:image/jpeg;base64,")
+                    $validated[$field] = preg_replace('/^data:image\/(jpeg|png|jpg);base64,/', '', $validated[$field]);
+                }
+            }
 
-        // Log the activity
-        ActivityLog::create([
-            'action' => 'Employee Updated',
-            'details' => "{$workman->name} {$workman->surname}",
-            'user' => 'Admin',
-        ]);
+            // Sanitize empty strings to null
+            $validated = array_map(function ($value) {
+                return is_string($value) && trim($value) === '' ? null : $value;
+            }, $validated);
 
-        return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
+            // Perform update and logging in a transaction
+            DB::transaction(function () use ($validated, $workman) {
+                $workman->update($validated);
+
+                ActivityLog::create([
+                    'action' => 'Employee Updated',
+                    'details' => "{$workman->name} {$workman->surname}",
+                    'user' => auth()->user()->name ?? 'System',
+                ]);
+            });
+
+            return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to update employee: ' . $e->getMessage()]);
+        }
     }
 
 

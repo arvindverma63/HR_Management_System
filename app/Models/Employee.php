@@ -49,6 +49,10 @@ class Employee extends Model
         'nominee_phone',
         'hourly_pay',
         'refer_by',
+        'aadhar',
+        'pancard',
+        'bank_statement',
+        'passbook'
     ];
 
 
@@ -61,7 +65,7 @@ class Employee extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Location::class,'location_id');
     }
     public function designation()
     {
