@@ -10,7 +10,6 @@ use App\Models\Workman;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -154,36 +153,17 @@ class EmployeeController extends Controller
             'passbook' => 'nullable|string',
         ]);
 
-        try {
-            // Process Base64 fields: Optionally strip data URI prefix to store only Base64 content
-            $base64Fields = ['aadhar', 'pancard', 'bank_statement', 'passbook'];
-            foreach ($base64Fields as $field) {
-                if (isset($validated[$field]) && !empty($validated[$field])) {
-                    // Optionally strip the data URI prefix (e.g., "data:image/jpeg;base64,")
-                    $validated[$field] = preg_replace('/^data:image\/(jpeg|png|jpg);base64,/', '', $validated[$field]);
-                }
-            }
+        $workman->update($validated);
 
-            // Sanitize empty strings to null
-            $validated = array_map(function ($value) {
-                return is_string($value) && trim($value) === '' ? null : $value;
-            }, $validated);
 
-            // Perform update and logging in a transaction
-            DB::transaction(function () use ($validated, $workman) {
-                $workman->update($validated);
+        // Log the activity
+        ActivityLog::create([
+            'action' => 'Employee Updated',
+            'details' => "{$workman->name} {$workman->surname}",
+            'user' => 'Admin',
+        ]);
 
-                ActivityLog::create([
-                    'action' => 'Employee Updated',
-                    'details' => "{$workman->name} {$workman->surname}",
-                    'user' => auth()->user()->name ?? 'System',
-                ]);
-            });
-
-            return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Failed to update employee: ' . $e->getMessage()]);
-        }
+        return redirect()->route('employee.index')->with('success', 'Employee updated successfully!');
     }
 
 
