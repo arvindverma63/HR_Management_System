@@ -53,6 +53,10 @@ class Workman extends Model
         'nominee_phone',
         'hourly_pay',
         'email',
+        'aadhar',
+        'pancard',
+        'bank_statement',
+        'passbook'
     ];
 
     /**

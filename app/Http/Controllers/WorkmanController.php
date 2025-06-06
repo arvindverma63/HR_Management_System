@@ -91,6 +91,10 @@ class WorkmanController extends Controller
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
             'email' => 'required|email',
+            'aadhar' => 'nullable|string',
+            'pancard' => 'nullable|string',
+            'bank_statement' => 'nullable|string',
+            'passbook' => 'nullable|string',
         ]);
 
         $workman = Workman::create($validated);
@@ -174,6 +178,10 @@ class WorkmanController extends Controller
             'nominee_phone' => 'nullable|string|max:15',
             'hourly_pay' => 'nullable|numeric',
             'email' => 'required|email',
+            'aadhar' => 'nullable|string',
+            'pancard' => 'nullable|string',
+            'bank_statement' => 'nullable|string',
+            'passbook' => 'nullable|string',
         ]);
 
         $workman->update($validated);
