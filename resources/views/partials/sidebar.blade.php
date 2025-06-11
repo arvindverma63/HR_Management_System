@@ -8,7 +8,7 @@
              </svg>
          </button>
      </div>
-     <nav class="flex-1">
+     <nav class="flex-1 overflow-y-auto">
 
          @if (Auth::user()->role === 'admin')
              <a href="{{ route('dashboard') }}"
