@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\EmployeeAttendence;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,57 +22,61 @@ class InternalsheetController extends Controller
             'year' => 'required|integer|min:1900|max:9999',
         ]);
 
-        $report = Employee::select([
-            'employees.id',
-            'employees.name', // Added for report
-            'employees.designation', // Added for report
-            'employees.monthly_rate as rate_per_month',
-            DB::raw('ROUND(employees.monthly_rate / 28, 2) as rate_of_wages'),
-            DB::raw('ROUND(employees.hourly_pay, 2) as rate_of_ot'),
-            DB::raw('COUNT(DISTINCT CASE WHEN ea.status = "present" THEN ea.attendance_date END) as days_worked'),
-            DB::raw('COALESCE(SUM(ea.overtime_hours), 0) as overtime_hours'),
-            // Calculate shift duration in hours: (end_shift_time - start_shift_time) / 3600
-            DB::raw('TIMESTAMPDIFF(SECOND, locations.start_shift_time, locations.end_shift_time) / 3600 as shift_duration'),
-            // Monthly basic earnings: shift_duration * hourly_pay * days_worked
-            DB::raw('ROUND((TIMESTAMPDIFF(SECOND, locations.start_shift_time, locations.end_shift_time) / 3600) * employees.hourly_pay * COUNT(DISTINCT CASE WHEN ea.status = "present" THEN ea.attendance_date END), 2) as basic_earnings'),
-            DB::raw('COALESCE(SUM(ea.overtime_hours * employees.hourly_pay), 0) as overtime_earnings'),
-            DB::raw('0 as other_earnings'),
-            // Total earnings: basic_earnings + overtime_earnings + other_earnings
-            DB::raw('ROUND((TIMESTAMPDIFF(SECOND, locations.start_shift_time, locations.end_shift_time) / 3600) * employees.hourly_pay * COUNT(DISTINCT CASE WHEN ea.status = "present" THEN ea.attendance_date END) + COALESCE(SUM(ea.overtime_hours * employees.hourly_pay), 0), 2) as total_earnings'),
-            // Deductions (set to 0 since no deductions table exists)
-            DB::raw('0 as cash_deduction'),
-            DB::raw('0 as misc_deduction'),
-            DB::raw('0 as recovery_deduction'),
-            DB::raw('0 as bank_adv_deduction'),
-            // Total deductions: sum of all deductions (0)
-            DB::raw('0 as total_deductions'),
-            // Net payments: total_earnings - total_deductions
-            DB::raw('ROUND((TIMESTAMPDIFF(SECOND, locations.start_shift_time, locations.end_shift_time) / 3600) * employees.hourly_pay * COUNT(DISTINCT CASE WHEN ea.status = "present" THEN ea.attendance_date END) + COALESCE(SUM(ea.overtime_hours * employees.hourly_pay), 0), 2) as net_payments'),
-        ])
-            ->leftJoin('employee_attendence as ea', function ($join) use ($validated) {
-                $join->on('employees.id', '=', 'ea.employee_id')
-                    ->whereMonth('ea.attendance_date', $validated['month'])
-                    ->whereYear('ea.attendance_date', $validated['year']);
-            })
-            ->leftJoin('locations', 'employees.location_id', '=', 'locations.id')
-            ->whereExists(function ($query) use ($validated) {
-                $query->select(DB::raw(1))
-                    ->from('employee_attendence')
-                    ->whereColumn('employee_attendence.employee_id', 'employees.id')
-                    ->whereMonth('employee_attendence.attendance_date', $validated['month'])
-                    ->whereYear('employee_attendence.attendance_date', $validated['year'])
-                    ->where('employee_attendence.status', 'present');
-            })
-            ->groupBy(
-                'employees.id',
-                'employees.name',
-                'employees.designation',
-                'employees.monthly_rate',
-                'employees.hourly_pay',
-                'locations.start_shift_time',
-                'locations.end_shift_time'
-            )
-            ->get();
+        $startDate = Carbon::createFromDate($validated['year'], $validated['month'], 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($validated['year'], $validated['month'], 1)->endOfMonth();
+
+        $attendances = EmployeeAttendence::whereBetween('created_at', [$startDate, $endDate])->get();
+        $report = [];
+
+        foreach ($attendances as $att) {
+            $startShift = $att->location->start_shift_time;
+            $endShift = $att->location->end_shift_time;
+
+            if (!$startShift || !$endShift) continue;
+
+            $start = Carbon::createFromFormat('H:i:s', $startShift);
+            $end = Carbon::createFromFormat('H:i:s', $endShift);
+            if ($end->lessThan($start)) $end->addDay();
+
+            $minutes = $end->diffInMinutes($start);
+            $hours = round($minutes / 60, 2);
+
+            $ratePerMonth = $att->employee->monthly_rate ?? 0;
+            $hourlyPay = $att->employee->hourly_pay ?? 0;
+            $otRate = $att->employee->ot_rate ?? $hourlyPay; // fallback to hourly if no ot rate
+
+            $daysWorked = $att->status === 'present' ? 1 : 0;
+
+            $overtimeHours = $att->overtime_hours ?? 0;
+
+            $basicEarnings = $att->status == 'present' ? $hourlyPay * $hours : 0;
+            $overtimeEarnings = $att->status == 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
+            $otherEarnings = $att->other_earnings ?? 0;
+
+            $cashDeduction = $att->cash_deduction ?? 0;
+            $miscRecovery = $att->misc_recovery ?? 0;
+            $bankAdv = $att->bank_adv ?? 0;
+
+            $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
+            $netPayments = ($basicEarnings + $overtimeEarnings + $otherEarnings) - $totalDeduction;
+
+            $report[] = (object)[
+                'name' => $att->employee->name,
+                'rate_per_month' => $ratePerMonth,
+                'rate_of_wages' => $hourlyPay,
+                'rate_of_ot' => $otRate,
+                'days_worked' => $daysWorked,
+                'overtime_hours' => $overtimeHours,
+                'basic_earnings' => $basicEarnings,
+                'overtime_earnings' => $overtimeEarnings,
+                'other_earnings' => $otherEarnings,
+                'cash_deduction' => $cashDeduction,
+                'misc_recovery' => $miscRecovery,
+                'bank_adv' => $bankAdv,
+                'total_deduction' => $totalDeduction,
+                'net_payments' => $netPayments,
+            ];
+        }
 
         return view('internalSheet', ['report' => $report]);
     }
