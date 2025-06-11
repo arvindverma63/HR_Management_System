@@ -1,10 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/vanilla-datatables@latest/dist/vanilla-dataTables.min.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const table = document.querySelector("#myTable");
-    new DataTable(table); // Vanilla DataTables init
-  });
-</script>
+
 
 <script>
     // Sidebar toggle for mobile

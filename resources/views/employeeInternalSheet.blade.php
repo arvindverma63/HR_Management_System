@@ -42,10 +42,10 @@
 
                 <!-- HR Report Content -->
                 <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-5 md:p-6 lg:p-8 mt-6">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">HR Report</h2>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Employee Internal Report</h2>
 
                     <!-- Form for Month and Year -->
-                    <form method="POST" action="{{ route('hr-report-fetch') }}"
+                    <form method="POST" action="{{ route('employee.internal.fetch') }}"
                         class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
                         @csrf
                         <div class="flex-1">

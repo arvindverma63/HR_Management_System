@@ -71,8 +71,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/reports/download-pdf', [ReportsController::class, 'downloadPdf'])->name('reports.download-pdf');
     Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
 
-    Route::get('/hr_report',[InternalsheetController::class,'HRIndex'])->name('hr.report');
-    Route::post('/hr-report', [InternalsheetController::class, 'getHRReport'])->name('hr-report');
+    Route::get('/hr-report',[InternalsheetController::class,'HRIndex'])->name('hr.report');
+    Route::post('/hr-report', [InternalsheetController::class, 'getHRReport'])->name('hr-report-fetch');
+    Route::get('/employee-report',[InternalsheetController::class,'employeeIndex'])->name('employee.internal.report');
+    Route::post('/employee-report',[InternalsheetController::class,'getEmployeeReport'])->name('employee.internal.fetch');
 
 
 });

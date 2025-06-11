@@ -30,7 +30,11 @@
              <a href="{{ route('employee.index') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Employee</a>
              <a href="{{ route('hr.report') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('hr.report') ? 'bg-blue-950' : '' }}">Employee Internal Sheet</a>
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('hr.report') ? 'bg-blue-950' : '' }}">HR
+                 Internal Sheet</a>
+             <a href="{{ route('employee.internal.report') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.internal.report') ? 'bg-blue-950' : '' }}">Employee
+                 Internal Sheet</a>
              <a href="{{ route('profile') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('profile') ? 'bg-blue-950' : '' }}">Profile</a>
 
