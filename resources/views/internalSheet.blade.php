@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Report</title>
     <!-- Include Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Define custom colors in Tailwind config -->
     <script>
         tailwind.config = {
@@ -13,7 +17,8 @@
                 extend: {
                     colors: {
                         'custom-blue': '#134a6b',
-                        'custom-blue-dark': '#0f3a54', /* Darker shade for hover */
+                        'custom-blue-dark': '#0f3a54',
+                        /* Darker shade for hover */
                     },
                 },
             },
@@ -24,7 +29,7 @@
 <body class="bg-gradient-to-br from-gray-100 to-gray-300 font-sans antialiased min-h-screen overflow-hidden">
     <div class="flex h-screen">
         <!-- Sidebar -->
-@include('partials.sidebar')
+        @include('partials.sidebar')
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-y-auto">
@@ -84,104 +89,127 @@
                     @if (isset($report))
                         <div class="overflow-x-auto relative rounded-lg border border-gray-100 scroll-smooth">
                             <table id="hrTable" class="w-[1600px] text-xs text-left text-gray-700">
-                                <thead class="text-xs font-semibold uppercase bg-gradient-to-r from-custom-blue to-custom-blue/90 text-white">
+                                <thead
+                                    class="text-xs font-semibold uppercase bg-gradient-to-r from-custom-blue to-custom-blue/90 text-white">
                                     <tr>
                                         <th scope="col" data-sort="name" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Name</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="rate_per_month" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Rate/Month</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="rate_of_wages" data-order="asc"
                                             class="hidden sm:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Wages</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="rate_of_ot" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>OT Rate</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="days_worked" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Days</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="overtime_hours" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>OT Hours</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="basic_earnings" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Earnings: Basic</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="overtime_earnings" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Earnings: Overtime</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="other_earnings" data-order="asc"
                                             class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Earnings: Others</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="cash_deduction" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Deductions: Cash</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="misc_recovery" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Deductions: Misc</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="bank_adv" data-order="asc"
                                             class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Deductions: Bank Adv</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="total_deduction" data-order="asc"
                                             class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Deductions: Total</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                         <th scope="col" data-sort="net_payments" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Net Pay</span>
-                                                <span class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="net_payments" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Slip</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
                                     </tr>
@@ -192,7 +220,8 @@
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
                                                 {{ $row->name }}
                                             </td>
-                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Rate/Month">
+                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800"
+                                                data-label="Rate/Month">
                                                 {{ number_format($row->rate_per_month, 2) }}
                                             </td>
                                             <td class="hidden sm:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800"
@@ -241,6 +270,45 @@
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
                                                 {{ number_format($row->net_payments, 2) }}
                                             </td>
+                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
+                                                <form method="POST" action="{{ route('hr-report-fetch') }}"
+                                                    >
+                                                    @csrf
+                                                    <div class="flex-1" style="display: none;">
+                                                        <label for="month"
+                                                            class="block text-sm font-medium text-gray-700">Month</label>
+                                                        <select id="month" name="month"
+                                                            class="mt-1 block w-full rounded-md border-gray-200 text-sm shadow-sm focus:border-custom-blue focus:ring focus:ring-custom-blue focus:ring-opacity-50 transition duration-150">
+                                                            @for ($i = 1; $i <= 12; $i++)
+                                                                <option value="{{ $i }}"
+                                                                    {{ old('month', date('n')) == $i ? 'selected' : '' }}>
+                                                                    {{ date('F', mktime(0, 0, 0, $i, 1)) }}
+                                                                </option>
+                                                            @endfor
+                                                        </select>
+                                                        @error('month')
+                                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="flex-1" style="display: none;">
+                                                        <label for="year"
+                                                            class="block text-sm font-medium text-gray-700">Year</label>
+                                                        <input type="number" id="year" name="year"
+                                                            value="{{ old('year', date('Y')) }}" min="1900"
+                                                            max="9999"
+                                                            class="mt-1 block w-full rounded-md border-gray-200 text-sm shadow-sm focus:border-custom-blue focus:ring focus:ring-custom-blue focus:ring-opacity-50 transition duration-150">
+                                                        @error('year')
+                                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <input type="number" name="id" value="{{ $row->id }}" style="display: none;">
+
+                                                        <button type="submit"
+                                                            <i class="fa-solid fa-download"></i>
+                                                        </button>
+
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -261,9 +329,11 @@
             content: '↕';
             font-size: 0.75rem;
         }
+
         th[data-order="asc"] .sort-icon::after {
             content: '↑';
         }
+
         th[data-order="desc"] .sort-icon::after {
             content: '↓';
         }
@@ -274,36 +344,46 @@
             scrollbar-width: auto;
             scrollbar-color: #134a6b #e5e7eb;
         }
+
         .overflow-x-auto::-webkit-scrollbar {
-            height: 10px; /* Thicker scrollbar for better visibility */
+            height: 10px;
+            /* Thicker scrollbar for better visibility */
         }
+
         .overflow-x-auto::-webkit-scrollbar-track {
             background: #e5e7eb;
             border-radius: 4px;
             box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
         }
+
         .overflow-x-auto::-webkit-scrollbar-thumb {
             background: #134a6b;
             border-radius: 4px;
-            border: 2px solid #e5e7eb; /* Adds padding effect */
+            border: 2px solid #e5e7eb;
+            /* Adds padding effect */
         }
+
         .overflow-x-auto::-webkit-scrollbar-thumb:hover {
-            background: #0f3a54; /* Darker shade of #134a6b on hover */
+            background: #0f3a54;
+            /* Darker shade of #134a6b on hover */
         }
 
         /* Vertical Scrollbar for Main Content */
         .overflow-y-auto::-webkit-scrollbar {
             width: 8px;
         }
+
         .overflow-y-auto::-webkit-scrollbar-track {
             background: #e5e7eb;
             border-radius: 4px;
         }
+
         .overflow-y-auto::-webkit-scrollbar-thumb {
             background: #134a6b;
             border-radius: 4px;
             border: 2px solid #e5e7eb;
         }
+
         .overflow-y-auto::-webkit-scrollbar-thumb:hover {
             background: #0f3a54;
         }
@@ -311,7 +391,8 @@
         /* Ensure scroll on small laptops (1024px to 1280px) */
         @media (min-width: 1024px) and (max-width: 1280px) {
             #hrTable {
-                width: 1600px; /* Force table to be wider than viewport to trigger scroll */
+                width: 1600px;
+                /* Force table to be wider than viewport to trigger scroll */
             }
         }
 
@@ -319,15 +400,19 @@
         @media (max-width: 640px) {
             #hrTable {
                 display: block;
-                width: 100%; /* Reset width for mobile */
+                width: 100%;
+                /* Reset width for mobile */
             }
+
             #hrTable thead {
                 display: none;
             }
+
             #hrTable tbody,
             #hrTable tr {
                 display: block;
             }
+
             #hrTable tr {
                 margin-bottom: 1rem;
                 border: 1px solid #e5e7eb;
@@ -336,12 +421,14 @@
                 background: white;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             }
+
             #hrTable td {
                 display: flex;
                 justify-content: space-between;
                 padding: 0.5rem 0;
                 border: none;
             }
+
             #hrTable td::before {
                 content: attr(data-label);
                 font-weight: 600;
@@ -355,6 +442,7 @@
             #sidebar {
                 display: none;
             }
+
             #sidebar.open {
                 display: flex;
             }
@@ -382,8 +470,12 @@
                     const rows = Array.from(tbody.querySelectorAll('tr'));
 
                     rows.sort((a, b) => {
-                        let aValue = a.querySelector(`td[data-label="${header.textContent.trim()}"]`).textContent.trim();
-                        let bValue = b.querySelector(`td[data-label="${header.textContent.trim()}"]`).textContent.trim();
+                        let aValue = a.querySelector(
+                                `td[data-label="${header.textContent.trim()}"]`).textContent
+                            .trim();
+                        let bValue = b.querySelector(
+                                `td[data-label="${header.textContent.trim()}"]`).textContent
+                            .trim();
 
                         // Handle numeric values
                         aValue = aValue.replace(/,/g, '');
@@ -421,4 +513,5 @@
 
     @include('partials.js')
 </body>
+
 </html>

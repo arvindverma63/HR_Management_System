@@ -9,6 +9,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InternalsheetController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WorkmanController;
 use App\Models\Designation;
@@ -89,4 +90,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/{employee}/download-pdf', [EmployeeController::class, 'downloadPdf'])->name('employee.download-pdf');
     Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
     Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
+    Route::get('/internal/slip',[PayslipController::class,'getInternalSlip'])->name('internal.payslip');
 });
