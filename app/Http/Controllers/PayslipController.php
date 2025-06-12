@@ -20,7 +20,7 @@ class PayslipController extends Controller
 
         $attendances = Attendance::with('workman', 'location')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('workan_id',$request->id)
+            ->where('workman_id',$request->id)
             ->get();
 
         $report = [];
