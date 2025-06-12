@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 class PayslipController extends Controller
 {
     public function getInternalSlip(Request $request){
-        dd($request->all());
           $validated = $request->validate([
             'month' => 'required|integer|min:1|max:12',
             'year' => 'required|integer|min:1900|max:9999',

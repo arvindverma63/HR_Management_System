@@ -271,7 +271,7 @@
                                                 {{ number_format($row->net_payments, 2) }}
                                             </td>
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
-                                                <form method="POST" action="{{ route('hr-report-fetch') }}"
+                                                <form method="POST" action="{{ route('internal.payslip') }}"
                                                     >
                                                     @csrf
                                                     <div class="flex-1" style="display: none;">

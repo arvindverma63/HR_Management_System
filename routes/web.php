@@ -90,5 +90,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/{employee}/download-pdf', [EmployeeController::class, 'downloadPdf'])->name('employee.download-pdf');
     Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
     Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
-    Route::get('/internal/slip',[PayslipController::class,'getInternalSlip'])->name('internal.payslip');
+    Route::post('/internal/slip',[PayslipController::class,'getInternalSlip'])->name('internal.payslip');
 });
