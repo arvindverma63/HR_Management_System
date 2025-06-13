@@ -59,7 +59,7 @@ class WorkmanController extends Controller
             'sex' => 'nullable|in:male,female',
             'dob' => 'nullable|date',
             'blood_group' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-            'designation' => 'nullable|in:HSW,SSW,USW',
+            'designation' => 'required',
             'monthly_rate' => 'nullable|numeric|min:0',
             'handicapped' => 'nullable|boolean',
             'pan_number' => 'nullable|string|max:10',
