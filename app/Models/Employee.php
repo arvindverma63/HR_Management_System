@@ -52,7 +52,10 @@ class Employee extends Model
         'aadhar',
         'pancard',
         'bank_statement',
-        'passbook'
+        'passbook',
+        'other',
+        'da',
+        'employee_unique_id'
     ];
 
 

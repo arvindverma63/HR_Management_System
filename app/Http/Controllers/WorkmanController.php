@@ -95,6 +95,8 @@ class WorkmanController extends Controller
             'pancard' => 'nullable|string',
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
+            'da'=>'nullable',
+            'workman_unique_id' => 'nullable'
         ]);
 
         $workman = Workman::create($validated);
@@ -149,6 +151,7 @@ class WorkmanController extends Controller
             'designation' => 'nullable',
             'monthly_rate' => 'nullable|numeric|min:0',
             'handicapped' => 'nullable|boolean',
+            'workman_unique_id' => 'nullable',
             'pan_number' => 'nullable|string|max:10',
             'aadhar_number' => 'nullable|string|max:12',
             'qualification' => 'nullable|string|max:255',
@@ -182,6 +185,7 @@ class WorkmanController extends Controller
             'pancard' => 'nullable|string',
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
+            'da'=>'nullable',
         ]);
 
         $workman->update($validated);

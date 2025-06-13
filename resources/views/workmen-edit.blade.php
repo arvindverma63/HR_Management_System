@@ -162,6 +162,25 @@
                                     step="0.01">
                             </div>
                             <div>
+                                <label for="da" class="block text-sm font-medium text-gray-700">DA</label>
+                                <input type="number" id="da" name="da" value="{{ $workman->da }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    placeholder="Enter DA">
+                                @error('da')
+                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                             <div>
+                                <label for="workman_unique_id" class="block text-sm font-medium text-gray-700">HR Id</label>
+                                <input type="number" id="workman_unique_id" name="workman_unique_id" value="{{ $workman->workman_unique_id }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    placeholder="Enter HR Id">
+                                @error('da')
+                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div>
                                 <label for="handicapped"
                                     class="block text-sm font-medium text-gray-700">Handicapped</label>
                                 <select id="handicapped" name="handicapped"

@@ -56,7 +56,10 @@ class Workman extends Model
         'aadhar',
         'pancard',
         'bank_statement',
-        'passbook'
+        'passbook',
+        'other',
+        'da',
+        'workman_unique_id'
     ];
 
     /**

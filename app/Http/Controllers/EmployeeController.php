@@ -81,6 +81,7 @@ class EmployeeController extends Controller
             'pancard' => 'nullable|string',
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
+            'employee_unique_id' => 'nullable',
         ]);
 
         $workman = Employee::create($validated);
@@ -151,6 +152,7 @@ class EmployeeController extends Controller
             'pancard' => 'nullable|string',
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
+            'employee_unique_id' => 'nullable',
         ]);
 
         $workman->update($validated);
