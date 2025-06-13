@@ -91,4 +91,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
     Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
     Route::post('/internal/slip',[PayslipController::class,'getInternalSlip'])->name('internal.payslip');
+    Route::post('/internal/slip/employee',[PayslipController::class,'getEmployeeSlip'])->name('internal.payslip.getEmployeeSlip');
 });

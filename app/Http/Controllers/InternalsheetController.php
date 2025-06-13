@@ -71,6 +71,7 @@ class InternalsheetController extends Controller
             if (!isset($report[$employeeId])) {
                 $report[$employeeId] = (object)[
                     'name' => $employeeName,
+                    'id'=> $employeeId,
                     'rate_per_month' => $ratePerMonth,
                     'rate_of_wages' => $hourlyPay,
                     'rate_of_ot' => $otRate,
