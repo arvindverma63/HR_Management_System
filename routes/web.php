@@ -6,12 +6,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeAttendenceController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeDeductionController;
 use App\Http\Controllers\InternalsheetController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WorkmanController;
+use App\Http\Controllers\WorkmanDeductionController;
 use App\Models\Designation;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -72,12 +74,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/reports/download-pdf', [ReportsController::class, 'downloadPdf'])->name('reports.download-pdf');
     Route::get('/reports/download-csv', [ReportsController::class, 'downloadCsv'])->name('reports.download-csv');
 
-    Route::get('/hr-report',[InternalsheetController::class,'HRIndex'])->name('hr.report');
+    Route::get('/hr-report', [InternalsheetController::class, 'HRIndex'])->name('hr.report');
     Route::post('/hr-report', [InternalsheetController::class, 'getHRReport'])->name('hr-report-fetch');
-    Route::get('/employee-report',[InternalsheetController::class,'employeeIndex'])->name('employee.internal.report');
-    Route::post('/employee-report',[InternalsheetController::class,'getEmployeeReport'])->name('employee.internal.fetch');
-
-
+    Route::get('/employee-report', [InternalsheetController::class, 'employeeIndex'])->name('employee.internal.report');
+    Route::post('/employee-report', [InternalsheetController::class, 'getEmployeeReport'])->name('employee.internal.fetch');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -90,6 +90,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/{employee}/download-pdf', [EmployeeController::class, 'downloadPdf'])->name('employee.download-pdf');
     Route::get('/EmployeeAttendence', [EmployeeAttendenceController::class, 'index'])->name('EmployeeAttendence');
     Route::post('/EmployeeAttendence', [EmployeeAttendenceController::class, 'store'])->name('EmployeeAttendence.store');
-    Route::post('/internal/slip',[PayslipController::class,'getInternalSlip'])->name('internal.payslip');
-    Route::post('/internal/slip/employee',[PayslipController::class,'getEmployeeSlip'])->name('internal.payslip.getEmployeeSlip');
+    Route::post('/internal/slip', [PayslipController::class, 'getInternalSlip'])->name('internal.payslip');
+    Route::post('/internal/slip/employee', [PayslipController::class, 'getEmployeeSlip'])->name('internal.payslip.getEmployeeSlip');
+
+
+    // web.php
+    Route::get('workman-deductions', [WorkmanDeductionController::class, 'index'])->name('workman-deductions');
+    Route::post('workman-deductions', [WorkmanDeductionController::class, 'store'])->name('workman-deductions.store');
+    Route::put('workman-deductions/{id}', [WorkmanDeductionController::class, 'update'])->name('workman-deductions.update');
+    Route::delete('workman-deductions/{id}', [WorkmanDeductionController::class, 'destroy'])->name('workman-deductions.destroy');
+
+    Route::get('/employee-deductions', [EmployeeDeductionController::class, 'index'])->name('employee-deductions');
+    Route::post('/employee-deductions', [EmployeeDeductionController::class, 'store'])->name('employee-deductions.store');
+    Route::put('/employee-deductions/{id}', [EmployeeDeductionController::class, 'update'])->name('employee-deductions.update');
+    Route::delete('/employee-deductions/{id}', [EmployeeDeductionController::class, 'destroy'])->name('employee-deductions.destroy');
 });

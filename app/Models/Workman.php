@@ -80,4 +80,9 @@ class Workman extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
+    public function deductions()
+    {
+        return $this->hasMany(WorkmanDeduction::class, 'workman_unique_id', 'workman_unique_id');
+    }
 }
