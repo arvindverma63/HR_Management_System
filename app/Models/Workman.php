@@ -83,6 +83,6 @@ class Workman extends Model
 
     public function deductions()
     {
-        return $this->hasMany(WorkmanDeduction::class, 'workman_unique_id', 'workman_unique_id');
+        return $this->hasMany(WorkmanDeduction::class, 'workman_id');
     }
 }

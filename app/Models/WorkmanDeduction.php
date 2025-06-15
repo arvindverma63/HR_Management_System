@@ -11,14 +11,10 @@ class WorkmanDeduction extends Model
 
     protected $table = "workmen_deductions"; // <-- typo? Should this be "workman_deductions"?
 
-    protected $fillable = [
-        'location_id',
-        'type',
-        'rate',
-    ];
+    protected $fillable = ['workman_id', 'type', 'rate'];
 
-    public function location()
+    public function workman()
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(Workman::class);
     }
 }

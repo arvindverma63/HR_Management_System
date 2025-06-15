@@ -11,48 +11,43 @@ class EmployeeDeductionController extends Controller
 {
     public function index(Request $request)
     {
-        $location = null;
-        $deductions = [];
+        $locations = Location::all();
+        $employees = [];
+        $selectedLocation = null;
 
         if ($request->filled('location_id')) {
-            $location = Location::find($request->location_id);
-            if ($location) {
-                $deductions = $location->employeeDeduction;
+            $selectedLocation = Location::find($request->location_id);
+            if ($selectedLocation) {
+                $employees = Employee::where('location_id', $request->location_id)->with('deductions')->get();
             }
         }
 
-        return view('HRAdmin.employee-deductions', compact('location', 'deductions'));
+        return view('HRAdmin.employee-deductions', compact('locations', 'employees', 'selectedLocation'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'location_id' => 'required|exists:locations,id',
-            'type' => 'required|string',
-            'rate' => 'required|numeric',
+        $validated = $request->validate([
+            'employee_id' => 'required|exists:employees,id',
+            'type' => 'required|string|in:CASH,MISC,BANK ADV',
+            'rate' => 'required|numeric|min:0',
         ]);
 
-        EmployeeDeduction::create([
-            'location_id' => $request->location_id,
-            'type' => $request->type,
-            'rate' => $request->rate,
-        ]);
+        EmployeeDeduction::create($validated);
 
         return redirect()->back()->with('success', 'Deduction added successfully.');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'type' => 'required|string',
-            'rate' => 'required|numeric',
+        $deduction = EmployeeDeduction::findOrFail($id);
+
+        $validated = $request->validate([
+            'type' => 'required|string|in:CASH,MISC,BANK ADV',
+            'rate' => 'required|numeric|min:0',
         ]);
 
-        $deduction = EmployeeDeduction::findOrFail($id);
-        $deduction->update([
-            'type' => $request->type,
-            'rate' => $request->rate,
-        ]);
+        $deduction->update($validated);
 
         return redirect()->back()->with('success', 'Deduction updated successfully.');
     }

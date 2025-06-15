@@ -3,38 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
-use App\Models\WorkmanDeduction;
 use App\Models\Workman;
+use App\Models\WorkmanDeduction;
 use Illuminate\Http\Request;
 
 class WorkmanDeductionController extends Controller
 {
-    // WorkmanDeductionController.php
     public function index(Request $request)
     {
-        $location = null;
-        $deductions = [];
+        $locations = Location::all();
+        $workmen = [];
+        $selectedLocation = null;
 
         if ($request->filled('location_id')) {
-            $location = Location::find($request->location_id);
-            if ($location) {
-                $deductions = $location->workmanDeduction;
+            $selectedLocation = Location::find($request->location_id);
+            if ($selectedLocation) {
+                $workmen = Workman::where('location_id', $request->location_id)->with('deductions')->get();
             }
         }
 
-        return view('workman-deductions', compact('location', 'deductions'));
+        return view('workman-deductions', compact('locations', 'workmen', 'selectedLocation'));
     }
-
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'location_id' => 'required|exists:locations,id',
-            'type' => 'required|string',
-            'rate' => 'required|numeric',
+            'workman_id' => 'required|exists:workmen,id',
+            'type' => 'required|string|in:CASH,MISC,BANK ADV',
+            'rate' => 'required|numeric|min:0',
         ]);
 
         WorkmanDeduction::create($validated);
+
         return redirect()->back()->with('success', 'Deduction added!');
     }
 
@@ -43,17 +43,20 @@ class WorkmanDeductionController extends Controller
         $deduction = WorkmanDeduction::findOrFail($id);
 
         $validated = $request->validate([
-            'type' => 'required|string',
-            'rate' => 'required|numeric',
+            'type' => 'required|string|in:CASH,MISC,BANK ADV',
+            'rate' => 'required|numeric|min:0',
         ]);
 
         $deduction->update($validated);
+
         return redirect()->back()->with('success', 'Deduction updated!');
     }
 
     public function destroy($id)
     {
-        WorkmanDeduction::destroy($id);
+        $deduction = WorkmanDeduction::findOrFail($id);
+        $deduction->delete();
+
         return redirect()->back()->with('success', 'Deduction deleted!');
     }
 }

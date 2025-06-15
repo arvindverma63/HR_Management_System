@@ -68,10 +68,14 @@ class Employee extends Model
 
     public function location()
     {
-        return $this->belongsTo(Location::class,'location_id');
+        return $this->belongsTo(Location::class, 'location_id');
     }
     public function designation()
     {
         return $this->belongsTo(Designation::class, 'designation');
+    }
+    public function deductions()
+    {
+        return $this->hasMany(EmployeeDeduction::class);
     }
 }

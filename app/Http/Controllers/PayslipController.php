@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\EmployeeAttendence;
+use App\Models\EmployeeDeduction;
+use App\Models\WorkmanDeduction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PayslipController extends Controller
 {
-    public function getInternalSlip(Request $request){
+    public function getInternalSlip(Request $request)
+    {
 
-          $validated = $request->validate([
+        $validated = $request->validate([
             'month' => 'required|integer|min:1|max:12',
             'year' => 'required|integer|min:1900|max:9999',
             'id' => 'required|integer'
@@ -22,7 +25,7 @@ class PayslipController extends Controller
 
         $attendances = Attendance::with('workman', 'location')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('workman_id',$request->id)
+            ->where('workman_id', $request->id)
             ->get();
 
         $report = [];
@@ -56,9 +59,26 @@ class PayslipController extends Controller
             $overtimeEarnings = $att->status == 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
-            $cashDeduction = $att->cash_deduction ?? 0;
+            // Use created_at instead of updated_at if that's what you want
+            $cashDeduction = WorkmanDeduction::where('location_id', $att->workman->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'CASH')
+                ->sum('rate');
+
+            $miscRecovery = WorkmanDeduction::where('location_id', $att->workman->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'MISC')
+                ->sum('rate');
+
+            $bankAdv = WorkmanDeduction::where('location_id', $att->workman->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'BANK ADV')
+                ->sum('rate');
+
+            // Other values from attendance row itself:
             $miscRecovery = $att->misc_recovery ?? 0;
             $bankAdv = $att->bank_adv ?? 0;
+
             $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
             $netPayments = ($basicEarnings + $overtimeEarnings + $otherEarnings) - $totalDeduction;
 
@@ -99,7 +119,7 @@ class PayslipController extends Controller
         return view('slips.employee-pay-slip', ['report' => $report]);
     }
 
-        public function getEmployeeSlip(Request $request)
+    public function getEmployeeSlip(Request $request)
     {
         $validated = $request->validate([
             'month' => 'required|integer|min:1|max:12',
@@ -112,7 +132,7 @@ class PayslipController extends Controller
 
         $attendances = EmployeeAttendence::with('employee', 'location')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('employee_id',$request->id)
+            ->where('employee_id', $request->id)
             ->get();
 
         $report = [];
@@ -146,9 +166,21 @@ class PayslipController extends Controller
             $overtimeEarnings = $att->status == 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
-            $cashDeduction = $att->cash_deduction ?? 0;
-            $miscRecovery = $att->misc_recovery ?? 0;
-            $bankAdv = $att->bank_adv ?? 0;
+            // Use created_at instead of updated_at if that's what you want
+            $cashDeduction = EmployeeDeduction::where('location_id', $att->employee->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'CASH')
+                ->sum('rate');
+
+            $miscRecovery = EmployeeDeduction::where('location_id', $att->employee->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'MISC')
+                ->sum('rate');
+
+            $bankAdv = EmployeeDeduction::where('location_id', $att->employee->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'BANK ADV')
+                ->sum('rate');
             $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
             $netPayments = ($basicEarnings + $overtimeEarnings + $otherEarnings) - $totalDeduction;
 

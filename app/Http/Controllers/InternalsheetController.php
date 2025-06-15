@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\EmployeeAttendence;
+use App\Models\WorkmanDeduction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +72,7 @@ class InternalsheetController extends Controller
             if (!isset($report[$employeeId])) {
                 $report[$employeeId] = (object)[
                     'name' => $employeeName,
-                    'id'=> $employeeId,
+                    'id' => $employeeId,
                     'rate_per_month' => $ratePerMonth,
                     'rate_of_wages' => $hourlyPay,
                     'rate_of_ot' => $otRate,
@@ -158,9 +159,21 @@ class InternalsheetController extends Controller
             $overtimeEarnings = $att->status == 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
-            $cashDeduction = $att->cash_deduction ?? 0;
-            $miscRecovery = $att->misc_recovery ?? 0;
-            $bankAdv = $att->bank_adv ?? 0;
+            // Use created_at instead of updated_at if that's what you want
+            $cashDeduction = WorkmanDeduction::where('location_id', $att->workman->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'CASH')
+                ->sum('rate');
+
+            $miscRecovery = WorkmanDeduction::where('location_id', $att->workman->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'MISC')
+                ->sum('rate');
+
+            $bankAdv = WorkmanDeduction::where('location_id', $att->workman->location_id)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('type', 'BANK ADV')
+                ->sum('rate');
             $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
             $netPayments = ($basicEarnings + $overtimeEarnings + $otherEarnings) - $totalDeduction;
 
@@ -175,12 +188,12 @@ class InternalsheetController extends Controller
                     'basic_earnings' => 0,
                     'overtime_earnings' => 0,
                     'other_earnings' => 0,
-                    'cash_deduction' => 0,
-                    'misc_recovery' => 0,
-                    'bank_adv' => 0,
-                    'total_deduction' => 0,
+                    'cash_deduction' => $cashDeduction,
+                    'misc_recovery' => $miscRecovery,
+                    'bank_adv' => $bankAdv,
+                    'total_deduction' => $totalDeduction,
                     'net_payments' => 0,
-                    'id'=> $workmanId,
+                    'id' => $workmanId,
                 ];
             }
 
@@ -190,10 +203,6 @@ class InternalsheetController extends Controller
             $report[$workmanId]->basic_earnings += $basicEarnings;
             $report[$workmanId]->overtime_earnings += $overtimeEarnings;
             $report[$workmanId]->other_earnings += $otherEarnings;
-            $report[$workmanId]->cash_deduction += $cashDeduction;
-            $report[$workmanId]->misc_recovery += $miscRecovery;
-            $report[$workmanId]->bank_adv += $bankAdv;
-            $report[$workmanId]->total_deduction += $totalDeduction;
             $report[$workmanId]->net_payments += $netPayments;
         }
 
@@ -201,5 +210,4 @@ class InternalsheetController extends Controller
 
         return view('internalSheet', ['report' => $report]);
     }
-
 }
