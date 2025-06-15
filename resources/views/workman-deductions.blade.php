@@ -34,26 +34,41 @@
                 </div>
             @endif
 
-            <!-- Search Section -->
-            <div class="max-w-xl mx-auto my-8 bg-white shadow rounded p-6">
-                <h2 class="text-2xl font-bold mb-4">Find Workman</h2>
-                <form method="GET" action="{{ route('workman-deductions') }}" class="flex gap-4">
-                    <input type="text" name="workman_unique_id" placeholder="Enter Workman Unique ID"
-                        value="{{ request('workman_unique_id') }}"
-                        class="flex-1 border rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-300">
+            <!-- 🔍 Search Section -->
+            <div class="max-w-xl mx-auto my-8 bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">Find Location</h2>
+                <form method="GET" action="{{ route('workman-deductions') }}"
+                    class="flex flex-col md:flex-row md:items-end gap-4">
+                    <div class="flex-1">
+                        <label for="location_id" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                        <select id="location_id" name="location_id"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 md:p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            required>
+                            <option value="">Select Location</option>
+                            @foreach (App\Models\Location::all() as $loc)
+                                <option value="{{ $loc->id }}"
+                                    {{ request('location_id') == $loc->id ? 'selected' : '' }}>
+                                    {{ $loc->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('location_id')
+                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <button type="submit"
-                        class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+                        class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition w-full md:w-auto">
                         Search
                     </button>
                 </form>
             </div>
 
-            @if ($workman)
+            @if ($location)
                 <!-- Workman Details -->
                 <div class="max-w-xl mx-auto bg-white shadow rounded p-6 mb-8">
-                    <h3 class="text-xl font-semibold mb-2">Workman Details</h3>
-                    <p><strong>Unique ID:</strong> {{ $workman->workman_unique_id }}</p>
-                    <p><strong>Name:</strong> {{ $workman->name ?? 'N/A' }}</p>
+                    <h3 class="text-xl font-semibold mb-2">Location Details</h3>
+                    <p><strong>Location ID:</strong> {{ $location->id }}</p>
+                    <p><strong>Name:</strong> {{ $location->name ?? 'N/A' }}</p>
                     <!-- Add more fields as needed -->
                 </div>
 
@@ -62,7 +77,7 @@
                     <h3 class="text-xl font-semibold mb-4">Add Deduction</h3>
                     <form method="POST" action="{{ route('workman-deductions.store') }}" class="space-y-4">
                         @csrf
-                        <input type="hidden" name="workman_unique_id" value="{{ $workman->workman_unique_id }}">
+                        <input type="hidden" name="location_id" value="{{ $location->id }}">
                         <div>
                             <label class="block mb-1 font-medium">Type</label>
                             <select name="type" required

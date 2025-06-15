@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\WorkmanDeduction;
 use App\Models\Workman;
 use Illuminate\Http\Request;
@@ -11,23 +12,24 @@ class WorkmanDeductionController extends Controller
     // WorkmanDeductionController.php
     public function index(Request $request)
     {
-        $workman = null;
+        $location = null;
         $deductions = [];
 
-        if ($request->has('workman_unique_id')) {
-            $workman = Workman::where('workman_unique_id', $request->workman_unique_id)->first();
-            if ($workman) {
-                $deductions = $workman->deductions; // define hasMany in Workman model
+        if ($request->filled('location_id')) {
+            $location = Location::find($request->location_id);
+            if ($location) {
+                $deductions = $location->workmanDeduction;
             }
         }
 
-        return view('workman-deductions', compact('workman', 'deductions'));
+        return view('workman-deductions', compact('location', 'deductions'));
     }
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'workman_unique_id' => 'required|exists:workmen,workman_unique_id',
+            'location_id' => 'required|exists:locations,id',
             'type' => 'required|string',
             'rate' => 'required|numeric',
         ]);

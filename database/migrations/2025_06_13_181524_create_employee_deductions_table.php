@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employee_deductions', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_unique_id');
+            $table->integer('location_id');
             $table->string('type');
             $table->double('rate');
             $table->timestamps();

@@ -23,4 +23,14 @@ class Location extends Model
         'start_shift_time',
         'end_shift_time',
     ];
+
+    public function workmanDeduction()
+    {
+        return $this->hasMany(WorkmanDeduction::class);
+    }
+
+    public function employeeDeduction()
+    {
+        return $this->hasMany(EmployeeDeduction::class);
+    }
 }

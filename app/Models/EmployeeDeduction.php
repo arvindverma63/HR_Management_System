@@ -10,13 +10,13 @@ class EmployeeDeduction extends Model
     use HasFactory;
     protected $table = "employee_deductions";
     protected $fillable = [
-        'employee_unique_id',
+        'location_id',
         'type',
         'rate',
     ];
 
-    public function employee()
+    public function location()
     {
-        return $this->belongsTo(Employee::class, 'employee_unique_id', 'employee_unique_id');
+        return $this->belongsTo(Location::class, 'location_id');
     }
 }
