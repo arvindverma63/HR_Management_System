@@ -40,13 +40,15 @@ class InternalsheetController extends Controller
             $startShift = $att->location->start_shift_time;
             $endShift = $att->location->end_shift_time;
 
-            if (!$startShift || !$endShift)
+            if (!$startShift || !$endShift) {
                 continue;
+            }
 
             $start = Carbon::createFromFormat('H:i:s', $startShift);
             $end = Carbon::createFromFormat('H:i:s', $endShift);
-            if ($end->lessThan($start))
+            if ($end->lessThan($start)) {
                 $end->addDay();
+            }
 
             $minutes = $end->diffInMinutes($start);
             $hours = round($minutes / 60, 2);
@@ -58,18 +60,12 @@ class InternalsheetController extends Controller
             $daysWorked = $att->status === 'present' ? 1 : 0;
             $overtimeHours = $att->overtime_hours ?? 0;
 
-            $basicEarnings = $att->status == 'present' ? $hourlyPay * $hours : 0;
-            $overtimeEarnings = $att->status == 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
+            $basicEarnings = $att->status === 'present' ? $hourlyPay * $hours : 0;
+            $overtimeEarnings = $att->status === 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
-            $cashDeduction = $att->cash_deduction ?? 0;
-            $miscRecovery = $att->misc_recovery ?? 0;
-            $bankAdv = $att->bank_adv ?? 0;
-            $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
-            $netPayments = ($basicEarnings + $overtimeEarnings + $otherEarnings) - $totalDeduction;
-
-            // Initialize if not already
             if (!isset($report[$employeeId])) {
+                // Initialize deductions to 0, will sum them later
                 $report[$employeeId] = (object)[
                     'name' => $employeeName,
                     'id' => $employeeId,
@@ -89,17 +85,24 @@ class InternalsheetController extends Controller
                 ];
             }
 
-            // Accumulate values
+            // Accumulate attendance-based metrics
             $report[$employeeId]->days_worked += $daysWorked;
             $report[$employeeId]->overtime_hours += $overtimeHours;
             $report[$employeeId]->basic_earnings += $basicEarnings;
             $report[$employeeId]->overtime_earnings += $overtimeEarnings;
             $report[$employeeId]->other_earnings += $otherEarnings;
-            $report[$employeeId]->cash_deduction += $cashDeduction;
-            $report[$employeeId]->misc_recovery += $miscRecovery;
-            $report[$employeeId]->bank_adv += $bankAdv;
-            $report[$employeeId]->total_deduction += $totalDeduction;
-            $report[$employeeId]->net_payments += $netPayments;
+            $report[$employeeId]->net_payments += ($basicEarnings + $overtimeEarnings + $otherEarnings);
+
+            // Accumulate deductions for this attendance record
+            $report[$employeeId]->cash_deduction += $att->cash_deduction ?? 0;
+            $report[$employeeId]->misc_recovery += $att->misc_recovery ?? 0;
+            $report[$employeeId]->bank_adv += $att->bank_adv ?? 0;
+        }
+
+        // Calculate total deductions and adjust net payments
+        foreach ($report as $employeeId => $data) {
+            $report[$employeeId]->total_deduction = $data->cash_deduction + $data->misc_recovery + $data->bank_adv;
+            $report[$employeeId]->net_payments -= $data->total_deduction;
         }
 
         // Convert to array for view
@@ -137,13 +140,15 @@ class InternalsheetController extends Controller
             $startShift = $att->location->start_shift_time;
             $endShift = $att->location->end_shift_time;
 
-            if (!$startShift || !$endShift)
+            if (!$startShift || !$endShift) {
                 continue;
+            }
 
             $start = Carbon::createFromFormat('H:i:s', $startShift);
             $end = Carbon::createFromFormat('H:i:s', $endShift);
-            if ($end->lessThan($start))
+            if ($end->lessThan($start)) {
                 $end->addDay();
+            }
 
             $minutes = $end->diffInMinutes($start);
             $hours = round($minutes / 60, 2);
@@ -155,29 +160,29 @@ class InternalsheetController extends Controller
             $daysWorked = $att->status === 'present' ? 1 : 0;
             $overtimeHours = $att->overtime_hours ?? 0;
 
-            $basicEarnings = $att->status == 'present' ? $hourlyPay * $hours : 0;
-            $overtimeEarnings = $att->status == 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
+            $basicEarnings = $att->status === 'present' ? $hourlyPay * $hours : 0;
+            $overtimeEarnings = $att->status === 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
-            // Use created_at instead of updated_at if that's what you want
-            $cashDeduction = WorkmanDeduction::where('location_id', $att->workman->location_id)
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->where('type', 'CASH')
-                ->sum('rate');
-
-            $miscRecovery = WorkmanDeduction::where('location_id', $att->workman->location_id)
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->where('type', 'MISC')
-                ->sum('rate');
-
-            $bankAdv = WorkmanDeduction::where('location_id', $att->workman->location_id)
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->where('type', 'BANK ADV')
-                ->sum('rate');
-            $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
-            $netPayments = ($basicEarnings + $overtimeEarnings + $otherEarnings) - $totalDeduction;
-
             if (!isset($report[$workmanId])) {
+                // Calculate deductions once per workman for the entire month
+                $cashDeduction = WorkmanDeduction::where('workman_id', $workmanId)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('type', 'CASH')
+                    ->sum('rate');
+
+                $miscRecovery = WorkmanDeduction::where('workman_id', $workmanId)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('type', 'MISC')
+                    ->sum('rate');
+
+                $bankAdv = WorkmanDeduction::where('workman_id', $workmanId)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('type', 'BANK ADV')
+                    ->sum('rate');
+
+                $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
+
                 $report[$workmanId] = (object)[
                     'name' => $workmanName,
                     'rate_per_month' => $ratePerMonth,
@@ -197,16 +202,21 @@ class InternalsheetController extends Controller
                 ];
             }
 
-            // Accumulate
+            // Accumulate attendance-based metrics
             $report[$workmanId]->days_worked += $daysWorked;
             $report[$workmanId]->overtime_hours += $overtimeHours;
             $report[$workmanId]->basic_earnings += $basicEarnings;
             $report[$workmanId]->overtime_earnings += $overtimeEarnings;
             $report[$workmanId]->other_earnings += $otherEarnings;
-            $report[$workmanId]->net_payments += $netPayments;
+            $report[$workmanId]->net_payments += ($basicEarnings + $overtimeEarnings + $otherEarnings);
         }
 
-        $report = array_values($report); // convert to indexed array
+        // Adjust net payments for deductions after accumulating all earnings
+        foreach ($report as $workmanId => $data) {
+            $report[$workmanId]->net_payments -= $data->total_deduction;
+        }
+
+        $report = array_values($report); // Convert to indexed array
 
         return view('internalSheet', ['report' => $report]);
     }
