@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComplientSheet;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeAttendenceController;
@@ -78,6 +79,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/hr-report', [InternalsheetController::class, 'getHRReport'])->name('hr-report-fetch');
     Route::get('/employee-report', [InternalsheetController::class, 'employeeIndex'])->name('employee.internal.report');
     Route::post('/employee-report', [InternalsheetController::class, 'getEmployeeReport'])->name('employee.internal.fetch');
+    Route::post('/workman-complient-sheet',[ComplientSheet::class,'getHRReport'])->name('workman.complient.report');
+    Route::get('/hr-complient-report', [ComplientSheet::class, 'workmanComplientSheet'])->name('hr.complient-report');
+
+    Route::post('/employee-complient-sheet',[ComplientSheet::class,'getEmployeeReport'])->name('employee.complient.report');
+    Route::get('/employee-complient-report', [ComplientSheet::class, 'employeeIndex'])->name('employee.complient-report');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -104,4 +110,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee-deductions', [EmployeeDeductionController::class, 'store'])->name('employee-deductions.store');
     Route::put('/employee-deductions/{id}', [EmployeeDeductionController::class, 'update'])->name('employee-deductions.update');
     Route::delete('/employee-deductions/{id}', [EmployeeDeductionController::class, 'destroy'])->name('employee-deductions.destroy');
+
 });
