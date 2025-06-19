@@ -56,9 +56,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/workmen', [WorkmanController::class, 'index'])->name('workmen');
     Route::get('/new-workmen', [WorkmanController::class, 'create'])->name('new-workmen');
     Route::post('/workmen', [WorkmanController::class, 'store'])->name('new-workmen.store');
-    Route::get('/workmen/{workman}/edit', [WorkmanController::class, 'edit'])->name('workmen.edit');
+    Route::get('/workmen/{id}/edit', [WorkmanController::class, 'edit'])->name('workmen.edit');
     Route::put('/workmen/{workman}', [WorkmanController::class, 'update'])->name('workmen.update');
-    Route::delete('/workmen/{workman}', [WorkmanController::class, 'destroy'])->name('workmen.destroy');
+    Route::delete('/workmen/{id}', [WorkmanController::class, 'destroy'])->name('workmen.destroy');
     Route::get('/workmen/{workman}/download-pdf', [WorkmanController::class, 'downloadPdf'])->name('workmen.download-pdf');
     Route::put('/designations/{id}', [DesignationController::class, 'update'])->name('designations.update');
 
@@ -79,10 +79,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/hr-report', [InternalsheetController::class, 'getHRReport'])->name('hr-report-fetch');
     Route::get('/employee-report', [InternalsheetController::class, 'employeeIndex'])->name('employee.internal.report');
     Route::post('/employee-report', [InternalsheetController::class, 'getEmployeeReport'])->name('employee.internal.fetch');
-    Route::post('/workman-complient-sheet',[ComplientSheet::class,'getHRReport'])->name('workman.complient.report');
+
+    Route::post('/workman-complient-sheet', [ComplientSheet::class, 'getHRReport'])->name('workman.complient.report');
     Route::get('/hr-complient-report', [ComplientSheet::class, 'workmanComplientSheet'])->name('hr.complient-report');
 
-    Route::post('/employee-complient-sheet',[ComplientSheet::class,'getEmployeeReport'])->name('employee.complient.report');
+    Route::post('/employee-complient-sheet', [ComplientSheet::class, 'getEmployeeReport'])->name('employee.complient.report');
     Route::get('/employee-complient-report', [ComplientSheet::class, 'employeeIndex'])->name('employee.complient-report');
 });
 
@@ -110,5 +111,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee-deductions', [EmployeeDeductionController::class, 'store'])->name('employee-deductions.store');
     Route::put('/employee-deductions/{id}', [EmployeeDeductionController::class, 'update'])->name('employee-deductions.update');
     Route::delete('/employee-deductions/{id}', [EmployeeDeductionController::class, 'destroy'])->name('employee-deductions.destroy');
-
 });

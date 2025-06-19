@@ -122,3 +122,10 @@
         document.body.removeChild(link);
     });
 </script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#myTable').DataTable();
+  });
+</script>

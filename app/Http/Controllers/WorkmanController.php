@@ -95,7 +95,7 @@ class WorkmanController extends Controller
             'pancard' => 'nullable|string',
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
-            'da'=>'nullable',
+            'da' => 'nullable',
             'workman_unique_id' => 'nullable'
         ]);
 
@@ -125,12 +125,15 @@ class WorkmanController extends Controller
      * @param  \App\Models\Workman  $workman
      * @return \Illuminate\View\View
      */
-    public function edit(Workman $workman)
+    public function edit($id)
     {
+        $workman = Workman::with('designation')->findOrFail($id);
         $locations = Location::all();
         $designations = Designation::all();
+
         return view('workmen-edit', compact('workman', 'locations', 'designations'));
     }
+
 
     /**
      * Update the specified workman in storage.
@@ -185,7 +188,7 @@ class WorkmanController extends Controller
             'pancard' => 'nullable|string',
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
-            'da'=>'nullable',
+            'da' => 'nullable',
         ]);
 
         $workman->update($validated);
@@ -206,9 +209,9 @@ class WorkmanController extends Controller
      * @param  \App\Models\Workman  $workman
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Workman $workman)
+    public function destroy($id)
     {
-        $workmanName = "{$workman->name} {$workman->surname}";
+        $workman = Workman::find($id);
         $workman->delete();
 
         if ($workman) {
@@ -219,7 +222,7 @@ class WorkmanController extends Controller
         // Log the activity
         ActivityLog::create([
             'action' => 'Workman Deleted',
-            'details' => $workmanName,
+            'details' => $workman->name,
             'user' => 'Admin',
         ]);
 

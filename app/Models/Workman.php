@@ -81,6 +81,12 @@ class Workman extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class, 'designation');
+    }
+
+
     public function deductions()
     {
         return $this->hasMany(WorkmanDeduction::class, 'workman_id');

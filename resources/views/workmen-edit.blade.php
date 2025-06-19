@@ -130,15 +130,24 @@
                                     class="block text-sm font-medium text-gray-700">Designation</label>
                                 <select id="designation" name="designation"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all">
-                                    <option value="" {{ is_null($workman->designation) ? 'selected' : '' }}>
-                                        Select</option>
+
+                                    <!-- ✅ Proper placeholder: just says "Select" -->
+                                    <option value=""
+                                        {{ $desig = App\Models\Designation::find($workman->designation) ?? "Select" }}>
+                                        {{ $desig->name ?? "----Select------" }}
+                                    </option>
+
+                                    <!-- ✅ Loop, mark selected properly -->
                                     @foreach ($designations as $d)
                                         <option value="{{ $d->id }}"
-                                            {{ old('designation') == $d->id ? 'selected' : '' }}>
+                                            {{ old('designation', $workman->designation->id ?? '') == $d->id ? 'selected' : '' }}>
                                             {{ $d->name }}
                                         </option>
                                     @endforeach
+
                                 </select>
+
+
                             </div>
                         </div>
 
@@ -171,9 +180,11 @@
                                 @enderror
                             </div>
 
-                             <div>
-                                <label for="workman_unique_id" class="block text-sm font-medium text-gray-700">HR Id</label>
-                                <input type="number" id="workman_unique_id" name="workman_unique_id" value="{{ $workman->workman_unique_id }}"
+                            <div>
+                                <label for="workman_unique_id" class="block text-sm font-medium text-gray-700">HR
+                                    Id</label>
+                                <input type="number" id="workman_unique_id" name="workman_unique_id"
+                                    value="{{ $workman->workman_unique_id }}"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                     placeholder="Enter HR Id">
                                 @error('da')

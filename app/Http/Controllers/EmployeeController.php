@@ -16,13 +16,26 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search', '');
-        $workmen = Employee::with('location')
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('surname', 'like', "%{$search}%")
-                    ->orWhere('designation', 'like', "%{$search}%");
-            })
-            ->paginate(10);
+        if (Auth::user()->role == 'admin') {
+            $workmen = Employee::with('location')
+                ->when($search, function ($query, $search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('surname', 'like', "%{$search}%")
+                        ->orWhere('designation', 'like', "%{$search}%");
+                })
+                ->paginate(10);
+        } else {
+            $email = Auth::user()->email;
+            $workman = Workman::where('email', $email)->first();
+            $workmen = Employee::with('location')->where('location_id',$workman->location_id)
+                ->when($search, function ($query, $search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('surname', 'like', "%{$search}%")
+                        ->orWhere('designation', 'like', "%{$search}%");
+                })
+                ->paginate(10);
+        }
+
 
         return view('HRAdmin.employee', compact('workmen', 'search'));
     }

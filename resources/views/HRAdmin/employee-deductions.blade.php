@@ -74,7 +74,7 @@
                         <p class="text-gray-600">No employees found for this location.</p>
                     @else
                         <div class="overflow-x-auto">
-                            <table class="min-w-full border border-gray-200 rounded-lg">
+                            <table class="min-w-full border border-gray-200 rounded-lg" id="myTable">
                                 <thead class="bg-gray-100">
                                     <tr>
                                         <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
