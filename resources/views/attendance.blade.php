@@ -44,6 +44,20 @@
                                 class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                 onchange="this.form.submit()">
                         </div>
+                        <div class="mb-4">
+                            <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
+                            <select id="location_id" name="location_id"
+                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                onchange="this.form.submit()">
+                                <option value="">All Locations</option>
+                                @foreach ($locations as $location)
+                                    <option value="{{ $location->id }}"
+                                        {{ $location_id == $location->id ? 'selected' : '' }}>
+                                        {{ $location->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="w-full md:w-auto">
                             <input type="text" id="search" name="search" value="{{ $search }}"
                                 class="w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
@@ -88,7 +102,8 @@
                                                     value="{{ $workman->location_id }}">
                                             </td>
                                             <td class="p-2 md:p-4">
-                                                <input type="text" name="attendance[{{ $workman->id }}][overtime_hours]"
+                                                <input type="text"
+                                                    name="attendance[{{ $workman->id }}][overtime_hours]"
                                                     class="p-1 md:p-2 border rounded-lg w-full focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                                     placeholder="overtime_hours"
                                                     {{ $attendanceExists ? 'disabled' : '' }}>
@@ -112,7 +127,7 @@
                                     {{ $workmen->lastItem() }} of {{ $workmen->total() }} entries</span>
                             </div>
                             <div class="flex space-x-2">
-                                {{ $workmen->appends(['date' => $date, 'search' => $search])->links('pagination::tailwind') }}
+                                {{ $workmen->appends(['date' => $date, 'search' => $search, 'location_id' => $location_id])->links('pagination::tailwind') }}
                             </div>
                         </div>
 

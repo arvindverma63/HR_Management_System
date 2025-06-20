@@ -19,12 +19,19 @@ class AttendanceController extends Controller
     {
         $date = $request->input('date', now()->toDateString());
         $search = $request->input('search', '');
+        $location_id = $request->input('location_id', '');
 
-        // Fetch workmen with their locations, filter by search term if provided
+        // Fetch all locations for the dropdown
+        $locations = Location::all();
+
+        // Fetch workmen with their locations, filter by search term and location if provided
         $workmenQuery = Workman::with('location')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('surname', 'like', "%{$search}%");
+                    ->orWhere('surname', 'like', "%{$search}%");
+            })
+            ->when($location_id, function ($query, $location_id) {
+                $query->where('location_id', $location_id);
             });
 
         // Paginate workmen
@@ -33,9 +40,9 @@ class AttendanceController extends Controller
         // Check if attendance has already been submitted for the selected date
         $attendanceExists = Attendance::where('attendance_date', $date)->exists();
 
-        return view('attendance', compact('workmen', 'date', 'search', 'attendanceExists'));
+        // Pass locations (fixed typo) and location_id to the view
+        return view('attendance', compact('workmen', 'date', 'search', 'attendanceExists', 'locations', 'location_id'));
     }
-
     /**
      * Store the attendance records.
      *
