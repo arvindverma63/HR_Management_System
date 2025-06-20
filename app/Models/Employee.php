@@ -55,7 +55,17 @@ class Employee extends Model
         'passbook',
         'other',
         'da',
-        'employee_unique_id'
+        'employee_unique_id',
+
+                // ✅ New allowance columns
+        'basic_pay',
+        'house_rent_allowance',
+        'conveyance_allowance',
+        'food_allowance',
+        'site_allowance',
+        'statutory_bonus',
+        'retrenchment_allowance',
+        'medical',
     ];
 
 

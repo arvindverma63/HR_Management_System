@@ -73,8 +73,9 @@ class SkillTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SkillType $skillType)
+    public function destroy($id)
     {
+        $skillType = SkillType::find($id);
         $skillType->delete();
         return redirect()->route('skilltype.index')->with('success', 'Skill Type deleted successfully.');
     }

@@ -38,7 +38,7 @@
                                         <td class="px-4 py-2">{{ $skillType->rate }}</td>
                                         <td class="px-4 py-2">
                                             <a href="{{ route('skilltype.edit', $skillType) }}" class="text-blue-600 hover:underline">Edit</a>
-                                            <form action="{{ route('skilltype.destroy', $skillType) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this skill type?');">
+                                            <form action="{{ route('skilltype.destroy', $skillType->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this skill type?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 hover:underline ml-4">Delete</button>

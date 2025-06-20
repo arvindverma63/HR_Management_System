@@ -10,6 +10,7 @@ use App\Models\Workman;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -27,7 +28,7 @@ class EmployeeController extends Controller
         } else {
             $email = Auth::user()->email;
             $workman = Workman::where('email', $email)->first();
-            $workmen = Employee::with('location')->where('location_id',$workman->location_id)
+            $workmen = Employee::with('location')->where('location_id', $workman->location_id)
                 ->when($search, function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%")
                         ->orWhere('surname', 'like', "%{$search}%")
@@ -95,6 +96,15 @@ class EmployeeController extends Controller
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
             'employee_unique_id' => 'nullable',
+            // ✅ New allowance fields:
+            'basic_pay' => 'nullable|numeric|min:0',
+            'house_rent_allowance' => 'nullable|numeric|min:0',
+            'conveyance_allowance' => 'nullable|numeric|min:0',
+            'food_allowance' => 'nullable|numeric|min:0',
+            'site_allowance' => 'nullable|numeric|min:0',
+            'statutory_bonus' => 'nullable|numeric|min:0',
+            'retrenchment_allowance' => 'nullable|numeric|min:0',
+            'medical' => 'nullable|numeric|min:0',
         ]);
 
         $workman = Employee::create($validated);
@@ -114,13 +124,13 @@ class EmployeeController extends Controller
     {
         $userEmail = Auth::user()->email;
         $locationId = Workman::select('location_id')->where('email', $userEmail)->first();
-        $locations = Location::find($locationId);
+        $locations = Location::all();
         $designations = Designation::all();
         return view('HRAdmin.employee-edit', compact('employee', 'locations', 'designations'));
     }
 
 
-    public function update(Request $request, Employee $workman)
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'location_id' => 'required|exists:locations,id',
@@ -166,9 +176,21 @@ class EmployeeController extends Controller
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
             'employee_unique_id' => 'nullable',
+            // ✅ New allowance fields:
+            'basic_pay' => 'nullable|numeric|min:0',
+            'house_rent_allowance' => 'nullable|numeric|min:0',
+            'conveyance_allowance' => 'nullable|numeric|min:0',
+            'food_allowance' => 'nullable|numeric|min:0',
+            'site_allowance' => 'nullable|numeric|min:0',
+            'statutory_bonus' => 'nullable|numeric|min:0',
+            'retrenchment_allowance' => 'nullable|numeric|min:0',
+            'medical' => 'nullable|numeric|min:0',
         ]);
 
+
+        $workman = Employee::find($id);
         $workman->update($validated);
+
 
 
         // Log the activity

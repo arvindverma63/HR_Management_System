@@ -172,7 +172,8 @@
                                 </div>
 
                                 <div>
-                                    <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">Employee
+                                    <label for="employee_unique_id"
+                                        class="block text-sm font-medium text-gray-700">Employee
                                         Id</label>
                                     <input type="number" id="employee_unique_id" name="employee_unique_id"
                                         value="{{ old('employee_unique_id') }}"
@@ -201,6 +202,108 @@
                             </div>
                         </div>
 
+                        <div class="border-b pb-4 mt-6">
+                            <h4 class="text-lg font-medium text-gray-700 mb-4">Allowance Details</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+
+                                <div>
+                                    <label for="basic_pay" class="block text-sm font-medium text-gray-700">Basic
+                                        Pay</label>
+                                    <input type="number" step="0.01" id="basic_pay" name="basic_pay"
+                                        value="{{ old('basic_pay') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Basic Pay">
+                                    @error('basic_pay')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="house_rent_allowance"
+                                        class="block text-sm font-medium text-gray-700">House Rent Allowance</label>
+                                    <input type="number" step="0.01" id="house_rent_allowance"
+                                        name="house_rent_allowance" value="{{ old('house_rent_allowance') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter HRA">
+                                    @error('house_rent_allowance')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="conveyance_allowance"
+                                        class="block text-sm font-medium text-gray-700">Conveyance Allowance</label>
+                                    <input type="number" step="0.01" id="conveyance_allowance"
+                                        name="conveyance_allowance" value="{{ old('conveyance_allowance') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Conveyance Allowance">
+                                    @error('conveyance_allowance')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="food_allowance" class="block text-sm font-medium text-gray-700">Food
+                                        Allowance</label>
+                                    <input type="number" step="0.01" id="food_allowance" name="food_allowance"
+                                        value="{{ old('food_allowance') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Food Allowance">
+                                    @error('food_allowance')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="site_allowance" class="block text-sm font-medium text-gray-700">Site
+                                        Allowance</label>
+                                    <input type="number" step="0.01" id="site_allowance" name="site_allowance"
+                                        value="{{ old('site_allowance') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Site Allowance">
+                                    @error('site_allowance')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="statutory_bonus"
+                                        class="block text-sm font-medium text-gray-700">Statutory Bonus</label>
+                                    <input type="number" step="0.01" id="statutory_bonus" name="statutory_bonus"
+                                        value="{{ old('statutory_bonus') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Statutory Bonus">
+                                    @error('statutory_bonus')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="retrenchment_allowance"
+                                        class="block text-sm font-medium text-gray-700">Retrenchment Allowance</label>
+                                    <input type="number" step="0.01" id="retrenchment_allowance"
+                                        name="retrenchment_allowance" value="{{ old('retrenchment_allowance') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Retrenchment Allowance">
+                                    @error('retrenchment_allowance')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="medical"
+                                        class="block text-sm font-medium text-gray-700">Medical</label>
+                                    <input type="number" step="0.01" id="medical" name="medical"
+                                        value="{{ old('medical') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter Medical Allowance">
+                                    @error('medical')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                            </div>
+                        </div>
                         <!-- Identification -->
                         <div class="border-b pb-4">
                             <h4 class="text-lg font-medium text-gray-700 mb-4">Identification</h4>

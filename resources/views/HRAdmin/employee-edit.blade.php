@@ -34,7 +34,7 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                    <form method="POST" action="{{ route('employee.update', ['employee' => $employee]) }}">
+                    <form method="POST" action="{{ route('employee.update', ['id' => $employee->id]) }}">
 
                         @csrf
                         @method('PUT')
@@ -163,7 +163,7 @@
                                     class="block text-sm font-medium text-gray-700">Employee
                                     Id</label>
                                 <input type="number" id="employee_unique_id" name="employee_unique_id"
-                                    value="{{ $workman->employee_unique_id }}"
+                                    value="{{ $employee->employee_unique_id }}"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                     placeholder="Enter Employee Id">
                                 @error('employee_unique_id')
@@ -181,6 +181,78 @@
                             </div>
                         </div>
 
+                        <!-- Allowance Details -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="basic_pay" class="block text-sm font-medium text-gray-700">Basic
+                                    Pay</label>
+                                <input type="number" id="basic_pay" name="basic_pay"
+                                    value="{{ $employee->basic_pay }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="house_rent_allowance"
+                                    class="block text-sm font-medium text-gray-700">House Rent Allowance</label>
+                                <input type="number" id="house_rent_allowance" name="house_rent_allowance"
+                                    value="{{ $employee->house_rent_allowance }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="conveyance_allowance"
+                                    class="block text-sm font-medium text-gray-700">Conveyance Allowance</label>
+                                <input type="number" id="conveyance_allowance" name="conveyance_allowance"
+                                    value="{{ $employee->conveyance_allowance }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="food_allowance" class="block text-sm font-medium text-gray-700">Food
+                                    Allowance</label>
+                                <input type="number" id="food_allowance" name="food_allowance"
+                                    value="{{ $employee->food_allowance }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="site_allowance" class="block text-sm font-medium text-gray-700">Site
+                                    Allowance</label>
+                                <input type="number" id="site_allowance" name="site_allowance"
+                                    value="{{ $employee->site_allowance }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="statutory_bonus" class="block text-sm font-medium text-gray-700">Statutory
+                                    Bonus</label>
+                                <input type="number" id="statutory_bonus" name="statutory_bonus"
+                                    value="{{ $employee->statutory_bonus }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="retrenchment_allowance"
+                                    class="block text-sm font-medium text-gray-700">Retrenchment Allowance</label>
+                                <input type="number" id="retrenchment_allowance" name="retrenchment_allowance"
+                                    value="{{ $employee->retrenchment_allowance }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+
+                            <div>
+                                <label for="medical" class="block text-sm font-medium text-gray-700">Medical</label>
+                                <input type="number" id="medical" name="medical" value="{{ $employee->medical }}"
+                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                    step="0.01">
+                            </div>
+                        </div>
                         <!-- PAN and Aadhar -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
