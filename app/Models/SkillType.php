@@ -11,6 +11,6 @@ class SkillType extends Model
     protected $table = 'skill_types';
     protected $fillable = [
         'name',
-        'percentage',
+        'rate',
     ];
 }

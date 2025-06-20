@@ -27,7 +27,7 @@
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th class="px-4 py-2 text-left">Name</th>
-                                    <th class="px-4 py-2 text-left">Percentage</th>
+                                    <th class="px-4 py-2 text-left">Rate</th>
                                     <th class="px-4 py-2 text-left">Actions</th>
                                 </tr>
                             </thead>
@@ -35,7 +35,7 @@
                                 @foreach ($skillTypes as $skillType)
                                     <tr class="border-b">
                                         <td class="px-4 py-2">{{ $skillType->name }}</td>
-                                        <td class="px-4 py-2">{{ $skillType->percentage }}%</td>
+                                        <td class="px-4 py-2">{{ $skillType->rate }}</td>
                                         <td class="px-4 py-2">
                                             <a href="{{ route('skilltype.edit', $skillType) }}" class="text-blue-600 hover:underline">Edit</a>
                                             <form action="{{ route('skilltype.destroy', $skillType) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this skill type?');">

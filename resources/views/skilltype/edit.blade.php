@@ -31,8 +31,8 @@
                             <input type="text" name="name" id="name" value="{{ old('name', $skillType->name) }}" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-custom-blue" required>
                         </div>
                         <div class="mb-4">
-                            <label for="percentage" class="block text-gray-700 font-medium mb-2">Percentage</label>
-                            <input type="number" name="percentage" id="percentage" value="{{ old('percentage', $skillType->percentage) }}" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-custom-blue" min="0" max="100" required>
+                            <label for="percentage" class="block text-gray-700 font-medium mb-2">Rate</label>
+                            <input type="number" name="rate" id="percentage" value="{{ old('rate', $skillType->rate) }}" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-custom-blue" min="0" max="100" required>
                         </div>
                         <div class="flex justify-end space-x-4">
                             <a href="{{ route('skilltype.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Cancel</a>

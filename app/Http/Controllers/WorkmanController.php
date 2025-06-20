@@ -96,7 +96,16 @@ class WorkmanController extends Controller
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
             'da' => 'nullable',
-            'workman_unique_id' => 'nullable'
+            'workman_unique_id' => 'nullable',
+            // ✅ New allowance fields:
+            'basic_pay' => 'nullable|numeric|min:0',
+            'house_rent_allowance' => 'nullable|numeric|min:0',
+            'conveyance_allowance' => 'nullable|numeric|min:0',
+            'food_allowance' => 'nullable|numeric|min:0',
+            'site_allowance' => 'nullable|numeric|min:0',
+            'statutory_bonus' => 'nullable|numeric|min:0',
+            'retrenchment_allowance' => 'nullable|numeric|min:0',
+            'medical' => 'nullable|numeric|min:0',
         ]);
 
         $workman = Workman::create($validated);
@@ -189,6 +198,16 @@ class WorkmanController extends Controller
             'bank_statement' => 'nullable|string',
             'passbook' => 'nullable|string',
             'da' => 'nullable',
+
+            // ✅ New allowance fields:
+            'basic_pay' => 'nullable|numeric|min:0',
+            'house_rent_allowance' => 'nullable|numeric|min:0',
+            'conveyance_allowance' => 'nullable|numeric|min:0',
+            'food_allowance' => 'nullable|numeric|min:0',
+            'site_allowance' => 'nullable|numeric|min:0',
+            'statutory_bonus' => 'nullable|numeric|min:0',
+            'retrenchment_allowance' => 'nullable|numeric|min:0',
+            'medical' => 'nullable|numeric|min:0',
         ]);
 
         $workman->update($validated);

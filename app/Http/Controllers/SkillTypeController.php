@@ -32,7 +32,7 @@ class SkillTypeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'percentage' => 'required|numeric|between:0,100',
+            'rate' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -59,7 +59,7 @@ class SkillTypeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'percentage' => 'required|numeric|between:0,100',
+            'rate' => 'required|numeric|between:0,100',
         ]);
 
         if ($validator->fails()) {
