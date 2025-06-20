@@ -1,5 +1,3 @@
-
-
 <script>
     // Sidebar toggle for mobile
     const openSidebarBtn = document.getElementById('open-sidebar');
@@ -125,27 +123,39 @@
 
 
 <script>
-  $(document).ready(function() {
-    $('#myTable').DataTable({
-      dom: 'Bfrtip',
-      buttons: [
-        {
-          extend: 'copy',
-          className: 'btn btn-primary '
-        },
-        {
-          extend: 'csv',
-          className: 'btn btn-success'
-        },
-        {
-          extend: 'pdf',
-          className: 'btn btn-danger'
-        },
-        {
-          extend: 'print',
-          className: 'btn btn-info'
-        }
-      ]
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row mt-3'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: [{
+                    extend: 'copy',
+                    className: 'btn btn-primary mt-2 ml-2'
+                },
+                {
+                    extend: 'csv',
+                    className: 'btn btn-success mt-2 ml-2'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn btn-danger mt-2 ml-2'
+                },
+                {
+                    extend: 'print',
+                    className: 'btn btn-info mt-2 ml-2'
+                }
+            ],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search records..."
+            }
+        });
+
+        // Optional: Add Bootstrap classes to search & pagination after table init
+        $('.dataTables_filter input').addClass('form-control ms-2').css('width', '250px');
+        $('.dataTables_filter input').addClass('form-control ms-2').css('margin-top', '10px');
+        $('.dataTables_length select').addClass('form-select ms-2');
+        $('.dataTables_paginate').addClass('pagination justify-content-end');
+        $('.dataTables_paginate a').addClass('page-link');
     });
-  });
 </script>

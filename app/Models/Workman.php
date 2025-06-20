@@ -59,7 +59,18 @@ class Workman extends Model
         'passbook',
         'other',
         'da',
-        'workman_unique_id'
+        'workman_unique_id',
+
+        // ✅ New allowance columns
+        'basic_pay',
+        'house_rent_allowance',
+        'conveyance_allowance',
+        'food_allowance',
+        'site_allowance',
+        'statutory_bonus',
+        'retrenchment_allowance',
+        'medical',
+
     ];
 
     /**

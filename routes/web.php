@@ -13,6 +13,7 @@ use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SkillTypeController;
 use App\Http\Controllers\WorkmanController;
 use App\Http\Controllers\WorkmanDeductionController;
 use App\Models\Designation;
@@ -100,7 +101,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/internal/slip', [PayslipController::class, 'getInternalSlip'])->name('internal.payslip');
     Route::post('/internal/slip/employee', [PayslipController::class, 'getEmployeeSlip'])->name('internal.payslip.getEmployeeSlip');
 
-
+    Route::resource('skilltype', SkillTypeController::class);
     // web.php
     Route::get('workman-deductions', [WorkmanDeductionController::class, 'index'])->name('workman-deductions');
     Route::post('workman-deductions', [WorkmanDeductionController::class, 'store'])->name('workman-deductions.store');
