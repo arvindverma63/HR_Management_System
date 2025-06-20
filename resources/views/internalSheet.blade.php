@@ -1,30 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HR Report</title>
-    <!-- Include Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Define custom colors in Tailwind config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'custom-blue': '#134a6b',
-                        'custom-blue-dark': '#0f3a54',
-                        /* Darker shade for hover */
-                    },
-                },
-            },
-        };
-    </script>
-</head>
+@include('partials.head')
 
 <body class="bg-gradient-to-br from-gray-100 to-gray-300 font-sans antialiased min-h-screen overflow-hidden">
     <div class="flex h-screen">
@@ -88,9 +65,9 @@
                     <!-- Report Table -->
                     @if (isset($report))
                         <div class="overflow-x-auto relative rounded-lg border border-gray-100 scroll-smooth">
-                            <table id="hrTable" class="w-[1600px] text-xs text-left text-gray-700">
+                            <table class="w-[1600px] text-xs text-left text-gray-700" id="myTable">
                                 <thead
-                                    class="text-xs font-semibold uppercase bg-gradient-to-r from-custom-blue to-custom-blue/90 text-white">
+                                    class="text-xs font-semibold uppercase bg-gradient-to-r from-custom-blue to-custom-blue/90 text-white" style="background: black;">
                                     <tr>
                                         <th scope="col" data-sort="name" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">

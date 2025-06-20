@@ -126,6 +126,26 @@
 
 <script>
   $(document).ready(function() {
-    $('#myTable').DataTable();
+    $('#myTable').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copy',
+          className: 'btn btn-primary '
+        },
+        {
+          extend: 'csv',
+          className: 'btn btn-success'
+        },
+        {
+          extend: 'pdf',
+          className: 'btn btn-danger'
+        },
+        {
+          extend: 'print',
+          className: 'btn btn-info'
+        }
+      ]
+    });
   });
 </script>
