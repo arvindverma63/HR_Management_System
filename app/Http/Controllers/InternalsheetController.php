@@ -64,8 +64,16 @@ class InternalsheetController extends Controller
             $overtimeEarnings = $att->status === 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
+            // New: Allowance fields
+            $houseRentAllowance = $att->house_rent_allowance ?? 0;
+            $conveyanceAllowance = $att->conveyance_allowance ?? 0;
+            $foodAllowance = $att->food_allowance ?? 0;
+            $siteAllowance = $att->site_allowance ?? 0;
+            $statutoryBonus = $att->statutory_bonus ?? 0;
+            $retrenchmentAllowance = $att->retrenchment_allowance ?? 0;
+            $medical = $att->medical ?? 0;
+
             if (!isset($report[$employeeId])) {
-                // Initialize deductions to 0, will sum them later
                 $report[$employeeId] = (object)[
                     'name' => $employeeName,
                     'id' => $employeeId,
@@ -77,39 +85,78 @@ class InternalsheetController extends Controller
                     'basic_earnings' => 0,
                     'overtime_earnings' => 0,
                     'other_earnings' => 0,
+
+                    // Allowances
+                    'house_rent_allowance' => 0,
+                    'conveyance_allowance' => 0,
+                    'food_allowance' => 0,
+                    'site_allowance' => 0,
+                    'statutory_bonus' => 0,
+                    'retrenchment_allowance' => 0,
+                    'medical' => 0,
+
+                    // Deductions
                     'cash_deduction' => 0,
                     'misc_recovery' => 0,
                     'bank_adv' => 0,
                     'total_deduction' => 0,
+
                     'net_payments' => 0,
                 ];
             }
 
-            // Accumulate attendance-based metrics
+            // Accumulate earnings
             $report[$employeeId]->days_worked += $daysWorked;
             $report[$employeeId]->overtime_hours += $overtimeHours;
             $report[$employeeId]->basic_earnings += $basicEarnings;
             $report[$employeeId]->overtime_earnings += $overtimeEarnings;
             $report[$employeeId]->other_earnings += $otherEarnings;
+
+            // Accumulate allowances
+            $report[$employeeId]->house_rent_allowance += $houseRentAllowance;
+            $report[$employeeId]->conveyance_allowance += $conveyanceAllowance;
+            $report[$employeeId]->food_allowance += $foodAllowance;
+            $report[$employeeId]->site_allowance += $siteAllowance;
+            $report[$employeeId]->statutory_bonus += $statutoryBonus;
+            $report[$employeeId]->retrenchment_allowance += $retrenchmentAllowance;
+            $report[$employeeId]->medical += $medical;
+
+            // Accumulate base net payment before deductions and allowance subtraction
             $report[$employeeId]->net_payments += ($basicEarnings + $overtimeEarnings + $otherEarnings);
 
-            // Accumulate deductions for this attendance record
+            // Accumulate deductions
             $report[$employeeId]->cash_deduction += $att->cash_deduction ?? 0;
             $report[$employeeId]->misc_recovery += $att->misc_recovery ?? 0;
             $report[$employeeId]->bank_adv += $att->bank_adv ?? 0;
         }
 
-        // Calculate total deductions and adjust net payments
+        // Finalize totals: total deductions and subtract allowances
         foreach ($report as $employeeId => $data) {
-            $report[$employeeId]->total_deduction = $data->cash_deduction + $data->misc_recovery + $data->bank_adv;
-            $report[$employeeId]->net_payments -= $data->total_deduction;
+            // Sum total deduction
+            $data->total_deduction = $data->cash_deduction + $data->misc_recovery + $data->bank_adv;
+
+            // Subtract total deduction from net payment
+            $data->net_payments -= $data->total_deduction;
+
+            // Sum all allowances
+            $allowancesTotal = $data->house_rent_allowance
+                + $data->conveyance_allowance
+                + $data->food_allowance
+                + $data->site_allowance
+                + $data->statutory_bonus
+                + $data->retrenchment_allowance
+                + $data->medical;
+
+            // Subtract total allowances as per your request
+            $data->net_payments -= $allowancesTotal;
         }
 
-        // Convert to array for view
+        // Convert to array for the view
         $report = array_values($report);
 
         return view('employeeInternalSheet', ['report' => $report]);
     }
+
 
 
     public function employeeIndex()
@@ -164,6 +211,15 @@ class InternalsheetController extends Controller
             $overtimeEarnings = $att->status === 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
+            // New: Allowance fields
+            $houseRentAllowance = $att->house_rent_allowance ?? 0;
+            $conveyanceAllowance = $att->conveyance_allowance ?? 0;
+            $foodAllowance = $att->food_allowance ?? 0;
+            $siteAllowance = $att->site_allowance ?? 0;
+            $statutoryBonus = $att->statutory_bonus ?? 0;
+            $retrenchmentAllowance = $att->retrenchment_allowance ?? 0;
+            $medical = $att->medical ?? 0;
+
             if (!isset($report[$workmanId])) {
                 // Calculate deductions once per workman for the entire month
                 $cashDeduction = WorkmanDeduction::where('workman_id', $workmanId)
@@ -184,6 +240,7 @@ class InternalsheetController extends Controller
                 $totalDeduction = $cashDeduction + $miscRecovery + $bankAdv;
 
                 $report[$workmanId] = (object)[
+                    'id' => $workmanId,
                     'name' => $workmanName,
                     'rate_per_month' => $ratePerMonth,
                     'rate_of_wages' => $hourlyPay,
@@ -193,30 +250,63 @@ class InternalsheetController extends Controller
                     'basic_earnings' => 0,
                     'overtime_earnings' => 0,
                     'other_earnings' => 0,
+
+                    // Allowances
+                    'house_rent_allowance' => 0,
+                    'conveyance_allowance' => 0,
+                    'food_allowance' => 0,
+                    'site_allowance' => 0,
+                    'statutory_bonus' => 0,
+                    'retrenchment_allowance' => 0,
+                    'medical' => 0,
+
+                    // Deductions
                     'cash_deduction' => $cashDeduction,
                     'misc_recovery' => $miscRecovery,
                     'bank_adv' => $bankAdv,
                     'total_deduction' => $totalDeduction,
+
                     'net_payments' => 0,
-                    'id' => $workmanId,
                 ];
             }
 
-            // Accumulate attendance-based metrics
+            // Accumulate metrics
             $report[$workmanId]->days_worked += $daysWorked;
             $report[$workmanId]->overtime_hours += $overtimeHours;
             $report[$workmanId]->basic_earnings += $basicEarnings;
             $report[$workmanId]->overtime_earnings += $overtimeEarnings;
             $report[$workmanId]->other_earnings += $otherEarnings;
+
+            // Accumulate allowances
+            $report[$workmanId]->house_rent_allowance += $houseRentAllowance;
+            $report[$workmanId]->conveyance_allowance += $conveyanceAllowance;
+            $report[$workmanId]->food_allowance += $foodAllowance;
+            $report[$workmanId]->site_allowance += $siteAllowance;
+            $report[$workmanId]->statutory_bonus += $statutoryBonus;
+            $report[$workmanId]->retrenchment_allowance += $retrenchmentAllowance;
+            $report[$workmanId]->medical += $medical;
+
+            // Add base net pay before deductions & allowance subtraction
             $report[$workmanId]->net_payments += ($basicEarnings + $overtimeEarnings + $otherEarnings);
         }
 
-        // Adjust net payments for deductions after accumulating all earnings
+        // Finalize: subtract deductions & allowances
         foreach ($report as $workmanId => $data) {
-            $report[$workmanId]->net_payments -= $data->total_deduction;
+            // Already summed: total deduction
+            $data->net_payments -= $data->total_deduction;
+
+            $allowancesTotal = $data->house_rent_allowance
+                + $data->conveyance_allowance
+                + $data->food_allowance
+                + $data->site_allowance
+                + $data->statutory_bonus
+                + $data->retrenchment_allowance
+                + $data->medical;
+
+            $data->net_payments -= $allowancesTotal;
         }
 
-        $report = array_values($report); // Convert to indexed array
+        $report = array_values($report);
 
         return view('internalSheet', ['report' => $report]);
     }

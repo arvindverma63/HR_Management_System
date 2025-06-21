@@ -63,9 +63,11 @@
                     <!-- Report Table -->
                     @if (isset($report))
                         <div class="overflow-x-auto relative rounded-lg border border-gray-100 scroll-smooth">
-                            <table class="w-[1600px] text-xs text-left text-gray-700" id="myTable" style="background: black;">
+                            <table class="w-[1600px] text-xs text-left text-gray-700" id="myTable"
+                                style="background: black;">
                                 <thead
-                                    class="text-xs font-semibold uppercase bg-gradient-to-r from-custom-blue to-custom-blue/90 text-white" style="background: black;">
+                                    class="text-xs font-semibold uppercase bg-gradient-to-r from-custom-blue to-custom-blue/90 text-white"
+                                    style="background: black;">
                                     <tr>
                                         <th scope="col" data-sort="name" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
@@ -171,6 +173,64 @@
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
+
+                                        <th scope="col" data-sort="house_rent_allowance" data-order="asc"
+                                            class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>House Rent</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="conveyance_allowance" data-order="asc"
+                                            class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Conveyance</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="food_allowance" data-order="asc"
+                                            class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Food</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="site_allowance" data-order="asc"
+                                            class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Site</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="statutory_bonus" data-order="asc"
+                                            class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Statutory Bonus</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="retrenchment_allowance" data-order="asc"
+                                            class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Retrenchment</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="medical" data-order="asc"
+                                            class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Medical</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+
                                         <th scope="col" data-sort="net_payments" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
@@ -242,11 +302,34 @@
                                                 data-label="Deductions: Total">
                                                 {{ number_format($row->total_deduction, 2) }}
                                             </td>
+                                            <td class="hidden md:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->house_rent_allowance, 2) }}
+                                            </td>
+                                            <td class="hidden md:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->conveyance_allowance, 2) }}
+                                            </td>
+                                            <td class="hidden lg:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->food_allowance, 2) }}
+                                            </td>
+                                            <td class="hidden lg:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->site_allowance, 2) }}
+                                            </td>
+                                            <td class="hidden xl:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->statutory_bonus, 2) }}
+                                            </td>
+                                            <td class="hidden xl:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->retrenchment_allowance, 2) }}
+                                            </td>
+                                            <td class="hidden xl:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
+                                                {{ number_format($row->medical, 2) }}
+                                            </td>
+
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
                                                 {{ number_format($row->net_payments, 2) }}
                                             </td>
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
-                                                <form method="POST" action="{{ route('internal.payslip.getEmployeeSlip') }}">
+                                                <form method="POST"
+                                                    action="{{ route('internal.payslip.getEmployeeSlip') }}">
                                                     @csrf
                                                     <div class="flex-1" style="display: none;">
                                                         <label for="month"
