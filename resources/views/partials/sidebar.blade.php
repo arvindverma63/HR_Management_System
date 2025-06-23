@@ -25,8 +25,9 @@
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee-deductions') ? 'bg-blue-950' : '' }}">Employee
                  Deductions</a>
              <a href="{{ route('skilltype.index') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('skilltype.index') ? 'bg-blue-950' : '' }}">Skill Types
-                 </a>
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('skilltype.index') ? 'bg-blue-950' : '' }}">Skill
+                 Types
+             </a>
              <a href="{{ route('attendence') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('attendence') ? 'bg-blue-950' : '' }}">Take
                  Attendance</a>
@@ -38,6 +39,9 @@
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('designation.index') ? 'bg-blue-950' : '' }}">Designation</a>
              <a href="{{ route('employee.index') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Employee</a>
+             <a href="{{ route('advances.index') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Employee
+                 Advance</a>
              <a href="{{ route('hr.report') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('hr.report') ? 'bg-blue-950' : '' }}">HR
                  Internal Sheet</a>
@@ -71,6 +75,10 @@
              <a href="{{ route('EmployeeAttendence') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('EmployeeAttendence') ? 'bg-blue-950' : '' }}">Take
                  Attendence</a>
+             <a href="{{ route('advances.index') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Employee
+                 Advance</a>
+
 
              <a href="{{ route('profile') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('profile') ? 'bg-blue-950' : '' }}">Profile</a>

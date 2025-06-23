@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplientSheet;
@@ -107,7 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('workman-deductions', [WorkmanDeductionController::class, 'store'])->name('workman-deductions.store');
     Route::put('workman-deductions/{id}', [WorkmanDeductionController::class, 'update'])->name('workman-deductions.update');
     Route::delete('workman-deductions/{id}', [WorkmanDeductionController::class, 'destroy'])->name('workman-deductions.destroy');
-
+    Route::resource('advances', AdvanceController::class);
+    Route::patch('advances/{id}/status', [AdvanceController::class, 'updateStatus'])->name('advances.updateStatus');
     Route::get('/employee-deductions', [EmployeeDeductionController::class, 'index'])->name('employee-deductions');
     Route::post('/employee-deductions', [EmployeeDeductionController::class, 'store'])->name('employee-deductions.store');
     Route::put('/employee-deductions/{id}', [EmployeeDeductionController::class, 'update'])->name('employee-deductions.update');
