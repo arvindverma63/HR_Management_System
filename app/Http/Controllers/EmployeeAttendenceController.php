@@ -5,23 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\Employee;
 use App\Models\EmployeeAttendence;
+use App\Models\Workman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeAttendenceController extends Controller
 {
     public function index(Request $request)
     {
+        $email = Auth::user()->email;
+        $workman = Workman::where('email', $email)->first();
+
+        if (!$workman) {
+            abort(404, 'Workman not found.');
+        }
+
         $date = $request->input('date', now()->toDateString());
         $search = $request->input('search', '');
 
-        // Fetch workmen with their locations, filter by search term if provided
+        // Fetch employees with their locations, filter by search term if provided
         $workmenQuery = Employee::with('location')
+            ->where('location_id', $workman->location_id)
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('surname', 'like', "%{$search}%");
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', "%{$search}%")
+                        ->orWhere('surname', 'like', "%{$search}%");
+                });
             });
 
-        // Paginate workmen
         $workmen = $workmenQuery->paginate(10);
 
         // Check if attendance has already been submitted for the selected date
@@ -29,6 +40,7 @@ class EmployeeAttendenceController extends Controller
 
         return view('HRAdmin.employeeAttendence', compact('workmen', 'date', 'search', 'attendanceExists'));
     }
+
 
     /**
      * Store the attendance records.
