@@ -138,6 +138,18 @@
                             </div>
                         </div>
 
+                        <div>
+                            <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">HR
+                                Id</label>
+                            <input type="number" id="employee_unique_id" name="employee_unique_id"
+                                value="{{ $workman->employee_unique_id }}"
+                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                placeholder="Enter HR Id">
+                            @error('da')
+                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Monthly Rate and Handicapped -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
@@ -248,7 +260,8 @@
 
                             <div>
                                 <label for="medical" class="block text-sm font-medium text-gray-700">Medical</label>
-                                <input type="number" id="medical" name="medical" value="{{ $employee->medical }}"
+                                <input type="number" id="medical" name="medical"
+                                    value="{{ $employee->medical }}"
                                     class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                     step="0.01">
                             </div>

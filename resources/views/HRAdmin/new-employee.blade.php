@@ -147,6 +147,18 @@
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                <div>
+                                    <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">HR
+                                        Id</label>
+                                    <input type="number" id="employee_unique_id" name="employee_unique_id"
+                                        value="{{ old('employee_unique_id') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter HR Id">
+                                    @error('employee_unique_id')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <div>
                                     <label for="monthly_rate" class="block text-sm font-medium text-gray-700">Monthly
                                         Rate</label>
