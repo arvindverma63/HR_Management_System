@@ -23,11 +23,11 @@
                  Internal Sheet</a>
 
              <a href="{{ route('employee.complient-report') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.complient-report') ? 'bg-blue-950' : '' }}">Employee
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.complient-report') ? 'bg-blue-950' : '' }}">Labour
                  Complient Sheet</a>
 
              <a href="{{ route('advances.index') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Employee
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Labour
                  Advance</a>
 
              <a href="{{ route('employee.index') }}"
@@ -78,15 +78,15 @@
 
          @if (Auth::user()->role === 'hr')
              <a href="{{ route('employee.index') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Employee</a>
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Labour</a>
              <a href="{{ route('new-employee') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-employee') ? 'bg-blue-950' : '' }}">New
-                 Employee</a>
+                 Labour</a>
              <a href="{{ route('EmployeeAttendence') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('EmployeeAttendence') ? 'bg-blue-950' : '' }}">Take
                  Attendence</a>
              <a href="{{ route('advances.index') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Employee
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Labour
                  Advance</a>
 
 
