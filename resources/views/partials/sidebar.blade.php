@@ -13,6 +13,29 @@
          @if (Auth::user()->role === 'admin')
              <a href="{{ route('dashboard') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-950' : '' }}">Dashboard</a>
+
+             <a href="{{ route('attendence') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('attendence') ? 'bg-blue-950' : '' }}">Take
+                 Attendance</a>
+
+             <a href="{{ route('employee.internal.report') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.internal.report') ? 'bg-blue-950' : '' }}">Labour
+                 Internal Sheet</a>
+
+             <a href="{{ route('employee.complient-report') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.complient-report') ? 'bg-blue-950' : '' }}">Employee
+                 Complient Sheet</a>
+
+             <a href="{{ route('advances.index') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Employee
+                 Advance</a>
+
+             <a href="{{ route('employee.index') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Labour</a>
+
+             <a href="{{ route('employee-deductions') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee-deductions') ? 'bg-blue-950' : '' }}">Labour
+                 Deductions</a>
              <a href="{{ route('new-workmen') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-workmen') ? 'bg-blue-950' : '' }}">New
                  Workmen Form</a>
@@ -21,39 +44,26 @@
              <a href="{{ route('workman-deductions') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('workman-deductions') ? 'bg-blue-950' : '' }}">Workmen
                  Deductions</a>
-             <a href="{{ route('employee-deductions') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee-deductions') ? 'bg-blue-950' : '' }}">Employee
-                 Deductions</a>
+
              <a href="{{ route('skilltype.index') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('skilltype.index') ? 'bg-blue-950' : '' }}">Skill
                  Types
              </a>
-             <a href="{{ route('attendence') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('attendence') ? 'bg-blue-950' : '' }}">Take
-                 Attendance</a>
              <a href="{{ route('reports') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('reports') ? 'bg-blue-950' : '' }}">Reports</a>
              <a href="{{ route('locations.index') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('locations.index') ? 'bg-blue-950' : '' }}">Locations</a>
              <a href="{{ route('designation.index') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('designation.index') ? 'bg-blue-950' : '' }}">Designation</a>
-             <a href="{{ route('employee.index') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.index') ? 'bg-blue-950' : '' }}">Employee</a>
-             <a href="{{ route('advances.index') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('advances.index') ? 'bg-blue-950' : '' }}">Employee
-                 Advance</a>
+
              <a href="{{ route('hr.report') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('hr.report') ? 'bg-blue-950' : '' }}">HR
                  Internal Sheet</a>
-             <a href="{{ route('employee.internal.report') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.internal.report') ? 'bg-blue-950' : '' }}">Employee
-                 Internal Sheet</a>
+
              <a href="{{ route('hr.complient-report') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('hr.complient-report') ? 'bg-blue-950' : '' }}">Workman
                  Complient Sheet</a>
-             <a href="{{ route('employee.complient-report') }}"
-                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee.complient-report') ? 'bg-blue-950' : '' }}">Employee
-                 Complient Sheet</a>
+
              <a href="{{ route('profile') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('profile') ? 'bg-blue-950' : '' }}">Profile</a>
 

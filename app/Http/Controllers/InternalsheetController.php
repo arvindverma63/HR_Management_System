@@ -102,6 +102,9 @@ class InternalsheetController extends Controller
                     'total_deduction' => 0,
 
                     'net_payments' => 0,
+
+                    'bank_ifsc' => $att->employee->bank_ifsc,
+                    'bank_account' => $att->employee->bank_account,
                 ];
             }
 

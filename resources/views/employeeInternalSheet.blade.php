@@ -174,67 +174,32 @@
                                             </div>
                                         </th>
 
-                                        <th scope="col" data-sort="house_rent_allowance" data-order="asc"
-                                            class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>House Rent</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" data-sort="conveyance_allowance" data-order="asc"
-                                            class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>Conveyance</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" data-sort="food_allowance" data-order="asc"
-                                            class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>Food</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" data-sort="site_allowance" data-order="asc"
-                                            class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>Site</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" data-sort="statutory_bonus" data-order="asc"
-                                            class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>Statutory Bonus</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" data-sort="retrenchment_allowance" data-order="asc"
-                                            class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>Retrenchment</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" data-sort="medical" data-order="asc"
-                                            class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
-                                            <div class="flex items-center justify-between">
-                                                <span>Medical</span>
-                                                <span
-                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
-                                            </div>
-                                        </th>
+
 
                                         <th scope="col" data-sort="net_payments" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
                                                 <span>Net Pay</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+
+                                         <th scope="col" data-sort="net_payments" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>
+                                                    AccountNo
+                                                </span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+
+                                         <th scope="col" data-sort="net_payments" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>IFSC Code</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -302,30 +267,14 @@
                                                 data-label="Deductions: Total">
                                                 {{ number_format($row->total_deduction, 2) }}
                                             </td>
-                                            <td class="hidden md:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->house_rent_allowance, 2) }}
-                                            </td>
-                                            <td class="hidden md:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->conveyance_allowance, 2) }}
-                                            </td>
-                                            <td class="hidden lg:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->food_allowance, 2) }}
-                                            </td>
-                                            <td class="hidden lg:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->site_allowance, 2) }}
-                                            </td>
-                                            <td class="hidden xl:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->statutory_bonus, 2) }}
-                                            </td>
-                                            <td class="hidden xl:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->retrenchment_allowance, 2) }}
-                                            </td>
-                                            <td class="hidden xl:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800">
-                                                {{ number_format($row->medical, 2) }}
-                                            </td>
-
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
                                                 {{ number_format($row->net_payments, 2) }}
+                                            </td>
+                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
+                                                {{ number_format($row->bank_ifsc, 2) }}
+                                            </td>
+                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
+                                                {{ number_format($row->bank_account, 2) }}
                                             </td>
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Net Pay">
                                                 <form method="POST"
