@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\Location;
+use App\Models\SkillType;
 use App\Models\Workman;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -47,7 +48,8 @@ class EmployeeController extends Controller
         $locationId = Workman::select('location_id')->where('email', $userEmail)->first();
         $locations = Location::find($locationId);
         $designations = Designation::all();
-        return view('HRAdmin.new-employee', compact('locations', 'designations'));
+        $skills = SkillType::all();
+        return view('HRAdmin.new-employee', compact('locations', 'designations','skills'));
     }
 
     public function store(Request $request)
@@ -105,6 +107,8 @@ class EmployeeController extends Controller
             'statutory_bonus' => 'nullable|numeric|min:0',
             'retrenchment_allowance' => 'nullable|numeric|min:0',
             'medical' => 'nullable|numeric|min:0',
+            'clims_id' => 'nullable',
+            'skill_type_id' => 'nullable',
         ]);
 
         $workman = Employee::create($validated);
@@ -185,6 +189,8 @@ class EmployeeController extends Controller
             'statutory_bonus' => 'nullable|numeric|min:0',
             'retrenchment_allowance' => 'nullable|numeric|min:0',
             'medical' => 'nullable|numeric|min:0',
+            'clims_id' => 'nullable',
+            'skill_type_id' => 'nullable',
         ]);
 
 

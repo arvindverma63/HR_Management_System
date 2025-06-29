@@ -57,7 +57,7 @@ class Employee extends Model
         'da',
         'employee_unique_id',
 
-                // ✅ New allowance columns
+        // ✅ New allowance columns
         'basic_pay',
         'house_rent_allowance',
         'conveyance_allowance',
@@ -67,6 +67,7 @@ class Employee extends Model
         'retrenchment_allowance',
         'medical',
         'clims_id',
+        'skill_type_id',
     ];
 
 
@@ -88,5 +89,9 @@ class Employee extends Model
     public function deductions()
     {
         return $this->hasMany(EmployeeDeduction::class);
+    }
+    public function skillType()
+    {
+        return $this->belongsTo(SkillType::class, 'skill_type_id');
     }
 }
