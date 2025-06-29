@@ -36,11 +36,16 @@
              <a href="{{ route('employee-deductions') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('employee-deductions') ? 'bg-blue-950' : '' }}">Labour
                  Deductions</a>
+             <a href="{{ route('additions.index') }}"
+                 class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('additions.index') ? 'bg-blue-950' : '' }}">Labour
+                 Addition</a>
              <a href="{{ route('new-workmen') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('new-workmen') ? 'bg-blue-950' : '' }}">New
                  Workmen Form</a>
              <a href="{{ route('workmen') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('workmen') ? 'bg-blue-950' : '' }}">Workmen</a>
+
+
              <a href="{{ route('workman-deductions') }}"
                  class="block py-2 px-4 md:py-3 md:px-6 text-base md:text-lg hover:bg-custom-blue-dark transition-all {{ request()->routeIs('workman-deductions') ? 'bg-blue-950' : '' }}">Workmen
                  Deductions</a>

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplientSheet;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\EmployeeAdditionController;
 use App\Http\Controllers\EmployeeAttendenceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDeductionController;
@@ -114,4 +115,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee-deductions', [EmployeeDeductionController::class, 'store'])->name('employee-deductions.store');
     Route::put('/employee-deductions/{id}', [EmployeeDeductionController::class, 'update'])->name('employee-deductions.update');
     Route::delete('/employee-deductions/{id}', [EmployeeDeductionController::class, 'destroy'])->name('employee-deductions.destroy');
+
+    // Resource routes for Employee Additions
+    Route::resource('additions', EmployeeAdditionController::class)->except(['show']);
+
+    // Custom route for AJAX location-based filtering
+    Route::get('additions', [EmployeeAdditionController::class, 'index'])->name('additions.index');
 });
