@@ -132,6 +132,23 @@
                                     <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                 @enderror
                             </div>
+
+                             <div>
+                                <label for="skill_type_id" class="block text-sm font-medium text-gray-700">Skills Type
+                                    </label>
+                                <select id="skill_type_id" name="skill_type_id"
+                                    class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue">
+                                    <option value="">Select Skills</option>
+                                    @foreach ($skills as $d)
+                                        <option value="{{ $d->id }}"
+                                            {{ old('skill_type_id', $employee->skill_type_id) == $d->id ? 'selected' : '' }}>
+                                            {{ $d->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('designation')
+                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>

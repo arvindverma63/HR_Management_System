@@ -130,7 +130,8 @@ class EmployeeController extends Controller
         $locationId = Workman::select('location_id')->where('email', $userEmail)->first();
         $locations = Location::all();
         $designations = Designation::all();
-        return view('HRAdmin.employee-edit', compact('employee', 'locations', 'designations'));
+        $skills = SkillType::all();
+        return view('HRAdmin.employee-edit', compact('employee', 'locations', 'designations','skills'));
     }
 
 
