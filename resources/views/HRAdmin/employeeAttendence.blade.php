@@ -65,6 +65,7 @@
                                             onclick="sortTable(1)">Department</th>
                                         <th class="p-2 md:p-4">Status</th>
                                         <th class="p-2 md:p-4">Overtime (in Hours)</th>
+                                        <th class="p-2 md:p-4">Sunday Attendance</th>
                                     </tr>
                                 </thead>
                                 <tbody id="attendance-table">
@@ -76,8 +77,8 @@
                                                 <select name="attendance[{{ $workman->id }}][status]"
                                                     class="p-1 md:p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue transition-all w-full"
                                                     {{ $attendanceExists ? 'disabled' : '' }}>
-                                                    <option value="present">Present</option>
                                                     <option value="absent">Absent</option>
+                                                    <option value="present">Present</option>
                                                     <option value="leave">Leave</option>
                                                 </select>
                                                 <input type="hidden"
@@ -93,10 +94,18 @@
                                                     placeholder="2"
                                                     {{ $attendanceExists ? 'disabled' : '' }}>
                                             </td>
+                                            <td class="p-2 md:p-4">
+                                                <select name="attendance[{{ $workman->id }}][sunday_attendance]"
+                                                    class="p-1 md:p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue transition-all w-full"
+                                                    {{ $attendanceExists ? 'disabled' : '' }}>
+                                                    <option value="present" {{ isset($workman->sunday_attendance) && $workman->sunday_attendance == 'present' ? 'selected' : '' }}>Present</option>
+                                                    <option value="absent" {{ isset($workman->sunday_attendance) && $workman->sunday_attendance == 'absent' ? 'selected' : '' }}>Absent</option>
+                                                </select>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="p-2 md:p-4 text-center text-gray-500">No employees
+                                            <td colspan="5" class="p-2 md:p-4 text-center text-gray-500">No employees
                                                 found.</td>
                                         </tr>
                                     @endforelse
@@ -146,5 +155,4 @@
         }
     </script>
 </body>
-
 </html>
