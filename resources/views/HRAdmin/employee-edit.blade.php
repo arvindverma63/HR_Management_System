@@ -53,6 +53,30 @@
                             </select>
                         </div>
 
+                        <div>
+                            <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">Form Id
+                            </label>
+                            <input type="number" id="employee_unique_id" name="employee_unique_id"
+                                value="{{ $employee->employee_unique_id }}"
+                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                placeholder="Enter HR Id">
+                            @error('da')
+                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="clims_id" class="block text-sm font-medium text-gray-700">Clims Id
+                            </label>
+                            <input type="number" id="clims_id" name="clims_id"
+                                value="{{ $employee->clims_id }}"
+                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                placeholder="Clims Id">
+                            @error('da')
+                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Name and Surname -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
@@ -138,17 +162,7 @@
                             </div>
                         </div>
 
-                        <div>
-                            <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">HR
-                                Id</label>
-                            <input type="number" id="employee_unique_id" name="employee_unique_id"
-                                value="{{ $employee->employee_unique_id }}"
-                                class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                placeholder="Enter HR Id">
-                            @error('da')
-                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
+
 
                         <!-- Monthly Rate and Handicapped -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -170,18 +184,6 @@
                                     step="0.01">
                             </div>
 
-                            <div>
-                                <label for="employee_unique_id"
-                                    class="block text-sm font-medium text-gray-700">Employee
-                                    Id</label>
-                                <input type="number" id="employee_unique_id" name="employee_unique_id"
-                                    value="{{ $employee->employee_unique_id }}"
-                                    class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                    placeholder="Enter Employee Id">
-                                @error('employee_unique_id')
-                                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                                @enderror
-                            </div>
                             <div>
                                 <label for="handicapped"
                                     class="block text-sm font-medium text-gray-700">Handicapped</label>

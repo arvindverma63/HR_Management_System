@@ -66,6 +66,7 @@ class Employee extends Model
         'statutory_bonus',
         'retrenchment_allowance',
         'medical',
+        'clims_id',
     ];
 
 

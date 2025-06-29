@@ -60,6 +60,27 @@
                             <h4 class="text-lg font-medium text-gray-700 mb-4">Personal Details</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                 <div>
+                                    <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">Form
+                                        Id</label>
+                                    <input type="number" id="employee_unique_id" name="employee_unique_id"
+                                        value="{{ old('employee_unique_id') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter HR Id">
+                                    @error('employee_unique_id')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="clims_id" class="block text-sm font-medium text-gray-700">Clims Id</label>
+                                    <input type="number" id="clims_id" name="clims_id"
+                                        value="{{ old('clims_id') }}"
+                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
+                                        placeholder="Enter HR Id">
+                                    @error('clims_id')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                                     <input type="text" id="name" name="name" value="{{ old('name') }}"
                                         class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
@@ -148,17 +169,7 @@
                                     @enderror
                                 </div>
 
-                                <div>
-                                    <label for="employee_unique_id" class="block text-sm font-medium text-gray-700">HR
-                                        Id</label>
-                                    <input type="number" id="employee_unique_id" name="employee_unique_id"
-                                        value="{{ old('employee_unique_id') }}"
-                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                        placeholder="Enter HR Id">
-                                    @error('employee_unique_id')
-                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
+
                                 <div>
                                     <label for="monthly_rate" class="block text-sm font-medium text-gray-700">Monthly
                                         Rate</label>
@@ -183,18 +194,6 @@
                                     @enderror
                                 </div>
 
-                                <div>
-                                    <label for="employee_unique_id"
-                                        class="block text-sm font-medium text-gray-700">Employee
-                                        Id</label>
-                                    <input type="number" id="employee_unique_id" name="employee_unique_id"
-                                        value="{{ old('employee_unique_id') }}"
-                                        class="mt-1 w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                        placeholder="Enter Employee Id">
-                                    @error('employee_unique_id')
-                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
                                 <div>
                                     <label for="handicapped"
                                         class="block text-sm font-medium text-gray-700">Handicapped
