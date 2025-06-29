@@ -156,10 +156,9 @@
                                     @enderror
                                 </div>
 
-                                 <div>
-                                    <label for="skill_type_id"
-                                        class="block text-sm font-medium text-gray-700">Designation
-                                        (HSW/SSW/USW)</label>
+                                <div>
+                                    <label for="skill_type_id" class="block text-sm font-medium text-gray-700">Skill
+                                        Type</label>
                                     <select id="skill_type" name="skill_type_id"
                                         class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue">
                                         <option value="">Select Skill Type</option>
