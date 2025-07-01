@@ -116,9 +116,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/employee-deductions/{id}', [EmployeeDeductionController::class, 'update'])->name('employee-deductions.update');
     Route::delete('/employee-deductions/{id}', [EmployeeDeductionController::class, 'destroy'])->name('employee-deductions.destroy');
 
-    // Resource routes for Employee Additions
-    Route::resource('additions', EmployeeAdditionController::class)->except(['show']);
-
-    // Custom route for AJAX location-based filtering
-    Route::get('additions', [EmployeeAdditionController::class, 'index'])->name('additions.index');
+    // Routes for Employee Additions
+    Route::get('/additions', [EmployeeAdditionController::class, 'index'])->name('additions.index');
+    Route::post('/additions', [EmployeeAdditionController::class, 'store'])->name('additions.store');
+    Route::get('/additions/{addition}/edit', [EmployeeAdditionController::class, 'edit'])->name('additions.edit');
+    Route::put('/additions/{addition}', [EmployeeAdditionController::class, 'update'])->name('additions.update');
+    Route::delete('/additions/{addition}', [EmployeeAdditionController::class, 'destroy'])->name('additions.destroy');
+    Route::get('/employees-by-location/{locationId}', [EmployeeAdditionController::class, 'getEmployeesByLocation'])->name('employees.by.location');
 });
