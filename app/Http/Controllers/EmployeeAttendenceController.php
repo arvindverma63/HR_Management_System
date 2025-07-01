@@ -82,7 +82,7 @@ class EmployeeAttendenceController extends Controller
                 $query->where(function ($subQuery) use ($search) {
                     $subQuery->where('name', 'like', "%{$search}%")
                         ->orWhere('surname', 'like', "%{$search}%")
-                        ->orWhere('employee_unquee_id', 'like', "%{$search}%")
+                        ->orWhere('employee_unique_id', 'like', "%{$search}%")
                         ->orWhere('clim_id', 'like', "%{$search}%");
                 });
             });

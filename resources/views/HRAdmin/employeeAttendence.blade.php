@@ -106,7 +106,7 @@
                                 @forelse ($workmen as $workman)
                                     <tr class="border-b hover:bg-gray-50 transition-all">
                                         <td class="p-2 md:p-3">{{ $workman->name }} {{ $workman->surname }}</td>
-                                        <td class="p-2 md:p-3">{{ $workman->employee_unquee_id }} </td>
+                                        <td class="p-2 md:p-3">{{ $workman->employee_unique_id }} </td>
                                         <td class="p-2 md:p-3">{{ $workman->clim_id }} </td>
                                         <td class="p-2 md:p-3">{{ $workman->designation ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-3">
