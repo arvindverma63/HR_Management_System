@@ -11,28 +11,31 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class EmployeeAttendenceController extends Controller
 {
+    /**
+     * Display the attendance page with employee list and form.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $email = Auth::user()->email;
 
+        // Log access to attendance page
         Log::info('User accessed attendance page', [
             'user_email' => $email,
             'ip_address' => $request->ip(),
         ]);
 
+        // Find the authenticated workman
         $workman = Workman::where('email', $email)->first();
 
-        ActivityLog::create([
-            'action' => 'Accessed Attendance Page',
-            'details' => "User {$email} accessed attendance page",
-            'user' => 'HR',
-        ]);
-
         if (!$workman) {
-            Log::error('Workman not found for email', [
+            Log::error('Workman not found', [
                 'email' => $email,
                 'ip_address' => $request->ip(),
             ]);
@@ -45,13 +48,14 @@ class EmployeeAttendenceController extends Controller
             abort(404, 'Workman not found.');
         }
 
-        // Log table names for debugging
-        Log::info('Model table names', [
-            'workman_table' => (new Workman)->getTable(),
-            'employee_table' => (new Employee)->getTable(),
+        ActivityLog::create([
+            'action' => 'Accessed Attendance Page',
+            'details' => "User {$email} accessed attendance page",
+            'user' => 'HR',
         ]);
 
-        $date = $request->input('date', now()->toDateString());
+        // Get request parameters
+        $date = $request->input('date', Carbon::today()->toDateString());
         $search = $request->input('search', '');
 
         Log::info('Attendance search initiated', [
@@ -66,7 +70,13 @@ class EmployeeAttendenceController extends Controller
             'user' => 'HR',
         ]);
 
-        $workmenQuery = Employee::with('location')
+        // Query employees with attendance for the month
+        $monthStart = Carbon::parse($date)->startOfMonth()->toDateString();
+        $monthEnd = Carbon::parse($date)->endOfMonth()->toDateString();
+
+        $workmenQuery = Employee::with(['location', 'attendances' => function ($query) use ($monthStart, $monthEnd) {
+            $query->whereBetween('attendance_date', [$monthStart, $monthEnd]);
+        }])
             ->where('location_id', $workman->location_id)
             ->when($search, function ($query, $search) {
                 $query->where(function ($subQuery) use ($search) {
@@ -77,6 +87,16 @@ class EmployeeAttendenceController extends Controller
 
         $workmen = $workmenQuery->paginate(10);
 
+        // Transform attendance data for Sunday checkboxes
+        $workmen->getCollection()->transform(function ($workman) {
+            $workman->sunday_attendance = $workman->attendances
+                ->where('status', 'present')
+                ->pluck('status', 'attendance_date')
+                ->toArray();
+            return $workman;
+        });
+
+        // Check if attendance exists for the selected date
         $attendanceExists = EmployeeAttendence::where('attendance_date', $date)->exists();
 
         Log::info('Checked attendance existence', [
@@ -97,22 +117,23 @@ class EmployeeAttendenceController extends Controller
     }
 
     /**
-     * Store the attendance records.
+     * Store attendance records, including overtime and Sunday attendance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $userEmail = Auth::user()->email;
 
-        Log::info('Attendance submission raw input', [
+        Log::info('Attendance submission started', [
             'user_email' => $userEmail,
             'input_data' => $request->all(),
             'ip_address' => $request->ip(),
         ]);
 
         try {
+            // Validate request data
             $validated = $request->validate([
                 'attendance_date' => 'required|date',
                 'attendance' => 'required|array',
@@ -121,92 +142,182 @@ class EmployeeAttendenceController extends Controller
                 'attendance.*.status' => 'required|in:present,absent,leave',
                 'attendance.*.overtime_hours' => 'nullable|numeric|min:0|max:500',
                 'attendance.*.notes' => 'nullable|string|max:1000',
-            ]);
-
-            Log::info('Attendance submission validated successfully', [
-                'user_email' => $userEmail,
-                'attendance_date' => $validated['attendance_date'],
-                'record_count' => count($validated['attendance']),
+                'attendance.*.sunday_attendance' => 'nullable|array',
+                'attendance.*.sunday_attendance.*' => 'nullable|in:present',
             ]);
 
             $attendanceDate = $validated['attendance_date'];
+            $nextDay = Carbon::parse($attendanceDate)->addDay()->toDateString();
+            $savedRecords = 0;
+
+            Log::info('Attendance submission validated', [
+                'user_email' => $userEmail,
+                'attendance_date' => $attendanceDate,
+                'record_count' => count($validated['attendance']),
+            ]);
 
             ActivityLog::create([
                 'action' => 'Attempted Attendance Submission',
-                'details' => "User {$userEmail} attempted to submit attendance for {$attendanceDate}",
+                'details' => "User {$userEmail} attempted to submit attendance for {$attendanceDate} with " . count($validated['attendance']) . " records",
                 'user' => 'HR',
             ]);
 
-            // Check for existing records for specific employees on this date
-            $existingRecords = EmployeeAttendence::where('attendance_date', $attendanceDate)
-                ->pluck('employee_id')
-                ->toArray();
-            Log::info('Checked for existing attendance records', [
-                'user_email' => $userEmail,
-                'date' => $attendanceDate,
-                'existing_employee_ids' => $existingRecords,
-            ]);
-
-            if (!empty($existingRecords)) {
-                Log::warning('Duplicate attendance submission attempt for some employees', [
-                    'user_email' => $userEmail,
-                    'date' => $attendanceDate,
-                    'existing_employee_ids' => $existingRecords,
-                ]);
-
-                ActivityLog::create([
-                    'action' => 'Warning: Duplicate Attendance',
-                    'details' => "Attendance already submitted for {$attendanceDate} for employee IDs: " . implode(', ', $existingRecords),
-                    'user' => 'HR',
-                ]);
-                // Allow partial submission by skipping existing records
+            // Get all Sundays in the month
+            $monthStart = Carbon::parse($attendanceDate)->startOfMonth();
+            $monthEnd = Carbon::parse($attendanceDate)->endOfMonth();
+            $sundayDates = [];
+            for ($day = $monthStart; $day <= $monthEnd; $day->addDay()) {
+                if ($day->isSunday()) {
+                    $sundayDates[] = $day->toDateString();
+                }
             }
 
-            $savedRecords = 0;
+            // Check existing records for selected date, next day, and Sundays
+            $existingRecords = EmployeeAttendence::whereIn('attendance_date', array_merge([$attendanceDate, $nextDay], $sundayDates))
+                ->select('employee_id', 'attendance_date')
+                ->get()
+                ->groupBy('attendance_date')
+                ->map(function ($group) {
+                    return $group->pluck('employee_id')->toArray();
+                })
+                ->toArray();
+
+            Log::info('Checked existing attendance records', [
+                'user_email' => $userEmail,
+                'dates' => array_merge([$attendanceDate, $nextDay], $sundayDates),
+                'existing_records' => $existingRecords,
+            ]);
+
             foreach ($validated['attendance'] as $index => $attendanceData) {
-                // Skip if record already exists for this employee and date
-                if (in_array($attendanceData['employee_id'], $existingRecords)) {
-                    Log::info('Skipped existing attendance record', [
-                        'user_email' => $userEmail,
-                        'employee_id' => $attendanceData['employee_id'],
-                        'date' => $attendanceDate,
-                    ]);
-                    continue;
-                }
+                $employeeId = $attendanceData['employee_id'];
+                $recordsSavedForEmployee = false;
+
+                Log::debug('Processing attendance for employee', [
+                    'user_email' => $userEmail,
+                    'employee_id' => $employeeId,
+                    'index' => $index,
+                    'attendance_data' => $attendanceData,
+                ]);
 
                 try {
-                    $record = EmployeeAttendence::create([
-                        'employee_id' => $attendanceData['employee_id'],
-                        'location_id' => $attendanceData['location_id'],
-                        'attendance_date' => $attendanceDate,
-                        'status' => $attendanceData['status'],
-                        'overtime_hours' => $attendanceData['overtime_hours'] ?? null,
-                        'notes' => $attendanceData['notes'] ?? null,
-                    ]);
+                    // Create main attendance record if it doesn't exist
+                    if (!isset($existingRecords[$attendanceDate]) || !in_array($employeeId, $existingRecords[$attendanceDate] ?? [])) {
+                        $record = EmployeeAttendence::create([
+                            'employee_id' => $employeeId,
+                            'location_id' => $attendanceData['location_id'],
+                            'attendance_date' => $attendanceDate,
+                            'status' => $attendanceData['status'],
+                            'overtime_hours' => null, // Overtime stored separately
+                            'notes' => $attendanceData['notes'] ?? null,
+                        ]);
 
-                    $savedRecords++;
+                        $recordsSavedForEmployee = true;
 
-                    Log::info('Attendance record created', [
-                        'user_email' => $userEmail,
-                        'employee_id' => $attendanceData['employee_id'],
-                        'date' => $attendanceDate,
-                        'status' => $attendanceData['status'],
-                        'overtime_hours' => $attendanceData['overtime_hours'] ?? 'none',
-                        'notes' => $attendanceData['notes'] ?? 'none',
-                        'record_id' => $record->id,
-                    ]);
+                        Log::info('Main attendance record created', [
+                            'user_email' => $userEmail,
+                            'employee_id' => $employeeId,
+                            'date' => $attendanceDate,
+                            'status' => $attendanceData['status'],
+                            'notes' => $attendanceData['notes'] ?? 'none',
+                            'record_id' => $record->id,
+                        ]);
 
-                    ActivityLog::create([
-                        'action' => 'Attendance Record Created',
-                        'details' => "Attendance recorded for employee ID {$attendanceData['employee_id']} on {$attendanceDate} with status {$attendanceData['status']}" .
-                            ($attendanceData['overtime_hours'] ? " and {$attendanceData['overtime_hours']} overtime hours" : "") .
-                            ($attendanceData['notes'] ? " with notes: {$attendanceData['notes']}" : ""),
-                        'user' => 'HR',
-                    ]);
+                        ActivityLog::create([
+                            'action' => 'Attendance Record Created',
+                            'details' => "Attendance recorded for employee ID {$employeeId} on {$attendanceDate} with status {$attendanceData['status']}" .
+                                ($attendanceData['notes'] ? " with notes: {$attendanceData['notes']}" : ""),
+                            'user' => 'HR',
+                        ]);
+                    } else {
+                        Log::info('Skipped existing main attendance record', [
+                            'user_email' => $userEmail,
+                            'employee_id' => $employeeId,
+                            'date' => $attendanceDate,
+                        ]);
+                    }
+
+                    // Create overtime record for the next day if applicable
+                    if (!empty($attendanceData['overtime_hours']) && $attendanceData['overtime_hours'] > 0) {
+                        if (!isset($existingRecords[$nextDay]) || !in_array($employeeId, $existingRecords[$nextDay] ?? [])) {
+                            $overtimeRecord = EmployeeAttendence::create([
+                                'employee_id' => $employeeId,
+                                'location_id' => $attendanceData['location_id'],
+                                'attendance_date' => $nextDay,
+                                'status' => 'present',
+                                'overtime_hours' => $attendanceData['overtime_hours'],
+                                'notes' => $attendanceData['notes'] ?? null,
+                            ]);
+
+                            $recordsSavedForEmployee = true;
+
+                            Log::info('Overtime record created', [
+                                'user_email' => $userEmail,
+                                'employee_id' => $employeeId,
+                                'date' => $nextDay,
+                                'overtime_hours' => $attendanceData['overtime_hours'],
+                                'record_id' => $overtimeRecord->id,
+                            ]);
+
+                            ActivityLog::create([
+                                'action' => 'Overtime Record Created',
+                                'details' => "Overtime recorded for employee ID {$employeeId} on {$nextDay} with {$attendanceData['overtime_hours']} hours",
+                                'user' => 'HR',
+                            ]);
+                        } else {
+                            Log::info('Skipped existing overtime record', [
+                                'user_email' => $userEmail,
+                                'employee_id' => $employeeId,
+                                'date' => $nextDay,
+                            ]);
+                        }
+                    }
+
+                    // Handle Sunday attendance
+                    if (!empty($attendanceData['sunday_attendance'])) {
+                        foreach ($attendanceData['sunday_attendance'] as $sundayDate => $status) {
+                            if ($status === 'present' && (!isset($existingRecords[$sundayDate]) || !in_array($employeeId, $existingRecords[$sundayDate] ?? []))) {
+                                $sundayRecord = EmployeeAttendence::create([
+                                    'employee_id' => $employeeId,
+                                    'location_id' => $attendanceData['location_id'],
+                                    'attendance_date' => $sundayDate,
+                                    'status' => 'present',
+                                    'overtime_hours' => null,
+                                    'notes' => $attendanceData['notes'] ?? null,
+                                ]);
+
+                                $recordsSavedForEmployee = true;
+
+                                Log::info('Sunday attendance record created', [
+                                    'user_email' => $userEmail,
+                                    'employee_id' => $employeeId,
+                                    'date' => $sundayDate,
+                                    'status' => 'present',
+                                    'record_id' => $sundayRecord->id,
+                                ]);
+
+                                ActivityLog::create([
+                                    'action' => 'Sunday Attendance Record Created',
+                                    'details' => "Sunday attendance recorded for employee ID {$employeeId} on {$sundayDate}",
+                                    'user' => 'HR',
+                                ]);
+                            } else {
+                                Log::info('Skipped existing Sunday attendance record', [
+                                    'user_email' => $userEmail,
+                                    'employee_id' => $employeeId,
+                                    'date' => $sundayDate,
+                                ]);
+                            }
+                        }
+                    }
+
+                    // Increment saved records if any record was created for this employee
+                    if ($recordsSavedForEmployee) {
+                        $savedRecords++;
+                    }
                 } catch (QueryException $e) {
                     Log::error('Failed to save attendance record', [
                         'user_email' => $userEmail,
-                        'employee_id' => $attendanceData['employee_id'],
+                        'employee_id' => $employeeId,
                         'date' => $attendanceDate,
                         'error_message' => $e->getMessage(),
                         'record_index' => $index,
@@ -214,14 +325,14 @@ class EmployeeAttendenceController extends Controller
 
                     ActivityLog::create([
                         'action' => 'Error: Attendance Record Creation Failed',
-                        'details' => "Failed to record attendance for employee ID {$attendanceData['employee_id']} on {$attendanceDate}: {$e->getMessage()}",
+                        'details' => "Failed to record attendance for employee ID {$employeeId} on {$attendanceDate}: {$e->getMessage()}",
                         'user' => 'HR',
                     ]);
                 }
             }
 
             if ($savedRecords === 0) {
-                Log::error('No attendance records were saved', [
+                Log::error('No attendance records saved', [
                     'user_email' => $userEmail,
                     'date' => $attendanceDate,
                     'attempted_records' => count($validated['attendance']),
@@ -230,10 +341,12 @@ class EmployeeAttendenceController extends Controller
 
                 ActivityLog::create([
                     'action' => 'Error: No Attendance Records Saved',
-                    'details' => "No attendance records were saved for {$attendanceDate} by {$userEmail}",
+                    'details' => "No attendance records saved for {$attendanceDate} by {$userEmail}. Attempted: " . count($validated['attendance']) . " records",
                     'user' => 'HR',
                 ]);
-                return redirect()->route('EmployeeAttendence')->with('error', 'No new attendance records were saved. All selected employees may already have attendance recorded.');
+
+                return redirect()->route('EmployeeAttendence')
+                    ->with('error', 'No new attendance records were saved. All selected employees may already have attendance recorded.');
             }
 
             Log::info('Attendance submission completed', [
@@ -244,11 +357,12 @@ class EmployeeAttendenceController extends Controller
 
             ActivityLog::create([
                 'action' => 'Attendance Submitted',
-                'details' => "User {$userEmail} successfully submitted {$savedRecords} attendance records for {$attendanceDate}",
                 'user' => 'HR',
+                'details' => "User {$userEmail} successfully submitted {$savedRecords} attendance records for {$attendanceDate}",
             ]);
 
-            return redirect()->route('EmployeeAttendence')->with('success', "Successfully submitted {$savedRecords} attendance records!");
+            return redirect()->route('EmployeeAttendence')
+                ->with('success', "Successfully submitted {$savedRecords} attendance records!");
         } catch (ValidationException $e) {
             Log::error('Attendance submission validation failed', [
                 'user_email' => $userEmail,
@@ -258,7 +372,7 @@ class EmployeeAttendenceController extends Controller
 
             ActivityLog::create([
                 'action' => 'Error: Validation Failed',
-                'details' => "Attendance submission failed for {$userEmail} due to validation errors: " . json_encode($e->errors()),
+                'details' => "Attendance submission failed for {$userEmail}: " . json_encode($e->errors()),
                 'user' => 'HR',
             ]);
 
@@ -272,11 +386,12 @@ class EmployeeAttendenceController extends Controller
 
             ActivityLog::create([
                 'action' => 'Error: Attendance Submission Failed',
-                'details' => "Unexpected error for {$userEmail} during attendance submission: {$e->getMessage()}",
+                'details' => "Unexpected error for {$userEmail}: {$e->getMessage()}",
                 'user' => 'HR',
             ]);
 
-            return redirect()->route('EmployeeAttendence')->with('error', 'An unexpected error occurred. Please try again.');
+            return redirect()->route('EmployeeAttendence')
+                ->with('error', 'An unexpected error occurred. Please try again.');
         }
     }
 }

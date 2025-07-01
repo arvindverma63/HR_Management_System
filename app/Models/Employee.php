@@ -94,4 +94,8 @@ class Employee extends Model
     {
         return $this->belongsTo(SkillType::class, 'skill_type_id');
     }
+    public function attendances()
+    {
+        return $this->hasMany(EmployeeAttendence::class, 'employee_id');
+    }
 }
