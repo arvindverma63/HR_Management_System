@@ -53,7 +53,8 @@ class EmployeeAdditionController extends Controller
      */
     public function getEmployeesByLocation($locationId)
     {
-        $employees = Employee::where('location_id', $locationId)->get(['id', 'name']);
+        $employees = Employee::where('location_id', $locationId)
+            ->get(['id', 'name', 'employee_unique_id']);
         return response()->json(['employees' => $employees]);
     }
 
@@ -67,18 +68,21 @@ class EmployeeAdditionController extends Controller
     {
         $request->validate([
             'location_id' => 'required|exists:locations,id',
-            'employee_id' => 'required|exists:employees,id',
-            'additions' => 'required|array',
+            'employee_ids' => 'required|array|min:1',
+            'employee_ids.*' => 'exists:employees,id',
+            'additions' => 'required|array|min:1',
             'additions.*.type' => 'required|string|max:255',
             'additions.*.rate' => 'required|numeric|min:0',
         ]);
 
-        foreach ($request->additions as $additionData) {
-            EmployeeAddition::create([
-                'employee_id' => $request->employee_id,
-                'type' => $additionData['type'],
-                'rate' => $additionData['rate'],
-            ]);
+        foreach ($request->employee_ids as $employeeId) {
+            foreach ($request->additions as $additionData) {
+                EmployeeAddition::create([
+                    'employee_id' => $employeeId,
+                    'type' => $additionData['type'],
+                    'rate' => $additionData['rate'],
+                ]);
+            }
         }
 
         return redirect()->route('additions.index')->with('success', 'Additions created successfully.');
@@ -107,14 +111,16 @@ class EmployeeAdditionController extends Controller
     {
         $request->validate([
             'location_id' => 'required|exists:locations,id',
-            'employee_id' => 'required|exists:employees,id',
+            'employee_ids' => 'required|array|min:1',
+            'employee_ids.*' => 'exists:employees,id',
             'additions' => 'required|array|min:1',
             'additions.*.type' => 'required|string|max:255',
             'additions.*.rate' => 'required|numeric|min:0',
         ]);
 
+        // Update the single addition (for simplicity, editing one addition at a time)
         $addition->update([
-            'employee_id' => $request->employee_id,
+            'employee_id' => $request->employee_ids[0],
             'type' => $request->additions[0]['type'],
             'rate' => $request->additions[0]['rate'],
         ]);

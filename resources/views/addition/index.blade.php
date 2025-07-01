@@ -36,28 +36,37 @@
                         @csrf
                         @if(isset($addition)) @method('PUT') @endif
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
-                                <select id="location_id" name="location_id" class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue" required>
-                                    <option value="">Select Location</option>
-                                    @foreach ($locations as $location)
-                                        <option value="{{ $location->id }}">{{ $location->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('location_id')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
+                        <div class="mb-4">
+                            <label for="location_id" class="block text-sm font-medium text-gray-700">Select Location</label>
+                            <select id="location_id" name="location_id" class="mt-1 w-full md:w-1/4 p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue" required>
+                                <option value="">Select Location</option>
+                                @foreach ($locations as $location)
+                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('location_id')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
+                        </div>
+
+                        <!-- Employee Selection Table -->
+                        <div id="employee-table-container" class="mb-4 hidden">
+                            <h4 class="text-lg font-medium text-gray-700 mb-2">Select Employees</h4>
+                            <div class="overflow-x-auto">
+                                <table id="employee-table" class="min-w-full bg-white border rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-100">
+                                            <th class="p-3 text-left text-sm font-medium text-gray-700">Select</th>
+                                            <th class="p-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                            <th class="p-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
-                            <div>
-                                <label for="employee_id" class="block text-sm font-medium text-gray-700">Employee</label>
-                                <select id="employee_id" name="employee_id" class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue" required>
-                                    <option value="">Select Employee</option>
-                                </select>
-                                @error('employee_id')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
-                            </div>
+                            @error('employee_ids')<span class="text-red-500 text-sm mt-1">{{ $message }}</span>@enderror
                         </div>
 
                         <!-- Dynamic Additions Table -->
-                        <div id="additions-container" class="mb-4">
+                        <div id="additions-container" class="mb-4 hidden">
                             <h4 class="text-lg font-medium text-gray-700 mb-2">Additions</h4>
                             <div id="additions-rows">
                                 <div class="addition-row grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
@@ -141,24 +150,37 @@
 <script>
     let rowCount = 1;
 
-    // Fetch employees based on selected location
+    // Fetch employees based on selected location and display in table
     document.getElementById('location_id').addEventListener('change', function() {
         const locationId = this.value;
-        const employeeSelect = document.getElementById('employee_id');
-        employeeSelect.innerHTML = '<option value="">Select Employee</option>';
+        const employeeTableContainer = document.getElementById('employee-table-container');
+        const employeeTableBody = document.querySelector('#employee-table tbody');
+        const additionsContainer = document.getElementById('additions-container');
 
         if (locationId) {
             fetch(`/employees-by-location/${locationId}`)
                 .then(response => response.json())
                 .then(data => {
+                    employeeTableBody.innerHTML = '';
                     data.employees.forEach(employee => {
-                        const option = document.createElement('option');
-                        option.value = employee.id;
-                        option.textContent = employee.name;
-                        employeeSelect.appendChild(option);
+                        employeeTableBody.innerHTML += `
+                            <tr>
+                                <td class="p-3 text-sm text-gray-700">
+                                    <input type="checkbox" name="employee_ids[]" value="${employee.id}" class="employee-checkbox">
+                                </td>
+                                <td class="p-3 text-sm text-gray-700">${employee.name}</td>
+                                <td class="p-3 text-sm text-gray-700">${employee.employee_unique_id}</td>
+                            </tr>
+                        `;
                     });
+                    employeeTableContainer.classList.remove('hidden');
+                    additionsContainer.classList.remove('hidden');
                 })
                 .catch(error => console.error('Error fetching employees:', error));
+        } else {
+            employeeTableContainer.classList.add('hidden');
+            additionsContainer.classList.add('hidden');
+            employeeTableBody.innerHTML = '';
         }
     });
 
@@ -196,7 +218,9 @@
         document.getElementById('addition-form').action = "{{ route('additions.store') }}";
         document.getElementById('addition-form').innerHTML = document.getElementById('addition-form').innerHTML.replace('@method("PUT")', '');
         document.getElementById('location_id').value = '';
-        document.getElementById('employee_id').innerHTML = '<option value="">Select Employee</option>';
+        document.getElementById('employee-table-container').classList.add('hidden');
+        document.getElementById('additions-container').classList.add('hidden');
+        document.querySelector('#employee-table tbody').innerHTML = '';
         document.getElementById('additions-rows').innerHTML = `
             <div class="addition-row grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
                 <div>
@@ -225,19 +249,25 @@
                 document.getElementById('addition-form').action = `/additions/${id}`;
                 document.getElementById('location_id').value = data.addition.employee.location_id;
 
-                // Populate employee dropdown
-                const employeeSelect = document.getElementById('employee_id');
-                employeeSelect.innerHTML = '<option value="">Select Employee</option>';
+                // Populate employee table
+                const employeeTableBody = document.querySelector('#employee-table tbody');
                 fetch(`/employees-by-location/${data.addition.employee.location_id}`)
                     .then(response => response.json())
                     .then(employeeData => {
+                        employeeTableBody.innerHTML = '';
                         employeeData.employees.forEach(employee => {
-                            const option = document.createElement('option');
-                            option.value = employee.id;
-                            option.textContent = employee.name;
-                            if (employee.id == data.addition.employee_id) option.selected = true;
-                            employeeSelect.appendChild(option);
+                            employeeTableBody.innerHTML += `
+                                <tr>
+                                    <td class="p-3 text-sm text-gray-700">
+                                        <input type="checkbox" name="employee_ids[]" value="${employee.id}" class="employee-checkbox" ${employee.id == data.addition.employee_id ? 'checked' : ''}>
+                                    </td>
+                                    <td class="p-3 text-sm text-gray-700">${employee.name}</td>
+                                    <td class="p-3 text-sm text-gray-700">${employee.employee_unique_id}</td>
+                                </tr>
+                            `;
                         });
+                        document.getElementById('employee-table-container').classList.remove('hidden');
+                        document.getElementById('additions-container').classList.remove('hidden');
                     });
 
                 // Populate single addition row
