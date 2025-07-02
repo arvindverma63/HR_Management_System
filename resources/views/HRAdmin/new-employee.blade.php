@@ -603,6 +603,42 @@
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                  <div>
+                                    <label for="bank_name" class="block text-sm font-medium text-gray-700">Bank
+                                        Bank Name</label>
+                                    <input type="text" id="bank_name" name="bank_name"
+                                        value="{{ old('bank_name') }}"
+                                        class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
+                                        placeholder="Enter bank name">
+                                    @error('bank_name')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                  <div>
+                                    <label for="bank_branch" class="block text-sm font-medium text-gray-700">
+                                        Bank Branch Name</label>
+                                    <input type="text" id="bank_branch" name="bank_branch"
+                                        value="{{ old('bank_branch') }}"
+                                        class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
+                                        placeholder="Enter bank bank_branch ">
+                                    @error('bank_branch')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                  <div>
+                                    <label for="bank_location" class="block text-sm font-medium text-gray-700">Bank
+                                        Bank Location</label>
+                                    <input type="text" id="bank_location" name="bank_location"
+                                        value="{{ old('bank_location') }}"
+                                        class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
+                                        placeholder="Enter bank bank_location">
+                                    @error('bank_location')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div>

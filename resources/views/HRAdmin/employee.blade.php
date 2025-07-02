@@ -37,7 +37,7 @@
 
                     <!-- Search Bar -->
                     <div class="mb-4 md:mb-6">
-                        <form method="GET" action="{{ route('workmen') }}">
+                        <form method="GET" action="{{ route('employee.index') }}">
                             <input type="text" id="search" name="search" value="{{ $search }}"
                                 class="w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
                                 placeholder="Search workmen by name or department..."
@@ -53,7 +53,9 @@
                                     <th class="p-2 md:p-4">Name</th>
                                     <th class="p-2 md:p-4">Department</th>
                                     <th class="p-2 md:p-4">Location</th>
-                                    <th class="p-2 md:p-4">Actions</th>
+                                     <th class="p-2 md:p-4">FormId</th>
+                                    <th class="p-2 md:p-4">ClimsId</th>
+                                    {{-- <th class="p-2 md:p-4">Actions</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,8 +64,10 @@
                                         <td class="p-2 md:p-4">{{ $workman->name }} {{ $workman->surname }}</td>
                                         <td class="p-2 md:p-4">{{ $workman->designation ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4">{{ $workman->location->name ?? 'N/A' }}</td>
+                                        <td class="p-2 md:p-4">{{ $workman->employee_unique_id ?? 'N/A' }}</td>
+                                        <td class="p-2 md:p-4">{{ $workman->location->clims_id ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4 flex space-x-2">
-                                            <a href="{{ route('employee.edit', $workman) }}"
+                                            {{-- <a href="{{ route('employee.edit', $workman) }}"
                                                 class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">Edit</a>
                                             <form action="{{ route('employee.destroy', $workman) }}" method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this workman?');">
@@ -71,9 +75,9 @@
                                                 @method('DELETE')
                                                 <button type="submit"
                                                     class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">Delete</button>
-                                            </form>
-                                            <a href="{{ route('employee.download-pdf', $workman) }}"
-                                                class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download PDF</a>
+                                            </form> --}}
+                                            {{-- <a href="{{ route('employee.download-pdf', $workman) }}"
+                                                class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download PDF</a> --}}
                                         </td>
                                     </tr>
                                 @empty

@@ -109,6 +109,9 @@ class EmployeeController extends Controller
             'medical' => 'nullable|numeric|min:0',
             'clims_id' => 'nullable',
             'skill_type_id' => 'nullable',
+            'bank_name' => 'nullable',
+            'bank_location' => 'nullable',
+            'bank_branch' => 'nullable',
         ]);
 
         $workman = Employee::create($validated);
@@ -192,6 +195,9 @@ class EmployeeController extends Controller
             'medical' => 'nullable|numeric|min:0',
             'clims_id' => 'nullable',
             'skill_type_id' => 'nullable',
+            'bank_name' => 'nullable',
+            'bank_location' => 'nullable',
+            'bank_branch' => 'nullable',
         ]);
 
 

@@ -159,3 +159,15 @@
         $('.dataTables_paginate a').addClass('page-link');
     });
 </script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            searchInput.focus();
+            // Move cursor to the end of the text
+            const val = searchInput.value;
+            searchInput.value = '';
+            searchInput.value = val;
+        }
+    });
+</script>

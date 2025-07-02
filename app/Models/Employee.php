@@ -68,6 +68,9 @@ class Employee extends Model
         'medical',
         'clims_id',
         'skill_type_id',
+        'bank_name',
+        'bank_branch',
+        'bank_location',
     ];
 
 

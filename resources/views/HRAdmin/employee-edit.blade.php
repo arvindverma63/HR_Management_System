@@ -133,9 +133,9 @@
                                 @enderror
                             </div>
 
-                             <div>
+                            <div>
                                 <label for="skill_type_id" class="block text-sm font-medium text-gray-700">Skills Type
-                                    </label>
+                                </label>
                                 <select id="skill_type_id" name="skill_type_id"
                                     class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue">
                                     <option value="">Select Skills</option>
