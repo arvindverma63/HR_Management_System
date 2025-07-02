@@ -23,7 +23,9 @@ class EmployeeController extends Controller
                 ->when($search, function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%")
                         ->orWhere('surname', 'like', "%{$search}%")
-                        ->orWhere('designation', 'like', "%{$search}%");
+                        ->orWhere('designation', 'like', "%{$search}%")
+                        ->orWhere('employee_unique_id', 'like', "%{$search}%")
+                        ->orWhere('clims_id', 'like', "%{$search}%");
                 })
                 ->paginate(10);
         } else {
@@ -33,7 +35,9 @@ class EmployeeController extends Controller
                 ->when($search, function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%")
                         ->orWhere('surname', 'like', "%{$search}%")
-                        ->orWhere('designation', 'like', "%{$search}%");
+                        ->orWhere('designation', 'like', "%{$search}%")
+                        ->orWhere('employee_unique_id', 'like', "%{$search}%")
+                        ->orWhere('clims_id', 'like', "%{$search}%");
                 })
                 ->paginate(10);
         }
