@@ -40,8 +40,7 @@
                         <form method="GET" action="{{ route('employee.index') }}">
                             <input type="text" id="search" name="search" value="{{ $search }}"
                                 class="w-full p-2 md:p-3 border rounded-lg focus:ring-2 focus:ring-custom-blue focus:border-custom-blue transition-all"
-                                placeholder="Search workmen by name or department..."
-                                oninput="this.form.submit()">
+                                placeholder="Search workmen by name or department..." oninput="this.form.submit()">
                         </form>
                     </div>
 
@@ -53,9 +52,9 @@
                                     <th class="p-2 md:p-4">Name</th>
                                     <th class="p-2 md:p-4">Department</th>
                                     <th class="p-2 md:p-4">Location</th>
-                                     <th class="p-2 md:p-4">FormId</th>
+                                    <th class="p-2 md:p-4">FormId</th>
                                     <th class="p-2 md:p-4">ClimsId</th>
-                                    {{-- <th class="p-2 md:p-4">Actions</th> --}}
+                                    <th class="p-2 md:p-4">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,22 +66,27 @@
                                         <td class="p-2 md:p-4">{{ $workman->employee_unique_id ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4">{{ $workman->location->clims_id ?? 'N/A' }}</td>
                                         <td class="p-2 md:p-4 flex space-x-2">
-                                            {{-- <a href="{{ route('employee.edit', $workman) }}"
-                                                class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">Edit</a>
-                                            <form action="{{ route('employee.destroy', $workman) }}" method="POST"
-                                                onsubmit="return confirm('Are you sure you want to delete this workman?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">Delete</button>
-                                            </form> --}}
-                                            {{-- <a href="{{ route('employee.download-pdf', $workman) }}"
-                                                class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download PDF</a> --}}
+                                            @if (Auth::user()->role == 'admin')
+                                                <a href="{{ route('employee.edit', $workman) }}"
+                                                    class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">Edit</a>
+                                                <form action="{{ route('employee.destroy', $workman) }}" method="POST"
+                                                    onsubmit="return confirm('Are you sure you want to delete this workman?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">Delete</button>
+                                                </form>
+                                            @endif
+
+                                            <a href="{{ route('employee.download-pdf', $workman) }}"
+                                                class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all">Download
+                                                PDF</a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="p-2 md:p-4 text-center text-gray-500">No Employee found.</td>
+                                        <td colspan="4" class="p-2 md:p-4 text-center text-gray-500">No Employee
+                                            found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -90,10 +94,12 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 md:mt-6 space-y-4 md:space-y-0">
+                    <div
+                        class="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 md:mt-6 space-y-4 md:space-y-0">
                         <div>
                             <span class="text-gray-600 text-sm md:text-base">
-                                Showing {{ $workmen->firstItem() }} to {{ $workmen->lastItem() }} of {{ $workmen->total() }} entries
+                                Showing {{ $workmen->firstItem() }} to {{ $workmen->lastItem() }} of
+                                {{ $workmen->total() }} entries
                             </span>
                         </div>
                         <div class="flex space-x-2">
@@ -107,4 +113,5 @@
 
     @include('partials.js')
 </body>
+
 </html>
