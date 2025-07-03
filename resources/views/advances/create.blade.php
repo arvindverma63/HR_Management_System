@@ -76,7 +76,8 @@
                                 <thead>
                                     <tr class="bg-gray-100">
                                         <th class="px-4 py-2 text-left text-gray-700">Employee</th>
-                                        <th class="px-4 py-2 text-left text-gray-700">Employee ID</th>
+                                        <th class="px-4 py-2 text-left text-gray-700">Form ID</th>
+                                        <th class="px-4 py-2 text-left text-gray-700">Clims ID</th>
                                         <th class="px-4 py-2 text-left text-gray-700">Amount</th>
                                         <th class="px-4 py-2 text-left text-gray-700">Notes</th>
                                         @if (Auth::user()->role === 'admin')
@@ -94,6 +95,9 @@
                                             </td>
                                             <td class="px-4 py-2">
                                                 {{ $employee->employee_unique_id }}
+                                            </td>
+                                             <td class="px-4 py-2">
+                                                {{ $employee->clims_id }}
                                             </td>
                                             <td class="px-4 py-2">
                                                 <input type="number" name="advances[{{ $employee->id }}][money]"
