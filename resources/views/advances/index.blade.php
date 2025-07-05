@@ -40,6 +40,34 @@
                     </div>
                 @endif
 
+                <!-- Filter and Search Form -->
+                <div class="mb-4 flex flex-col md:flex-row md:items-end gap-4">
+                    <div>
+                        <label for="location_filter" class="block text-sm font-medium text-gray-700">Filter by
+                            Location</label>
+                        <select id="location_filter" name="location_id"
+                            class="mt-1 w-full md:w-1/4 p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue">
+                            <option value="">All Locations</option>
+                            @foreach ($locations as $location)
+                                <option value="{{ $location->id }}"
+                                    {{ request('location_id') == $location->id ? 'selected' : '' }}>
+                                    {{ $location->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="employee_search" class="block text-sm font-medium text-gray-700">Search by Employee
+                            ID</label>
+                        <div class="flex">
+                            <input type="text" id="employee_search" name="employee_search"
+                                value="{{ request('employee_search') }}" placeholder="Search by Employee ID..."
+                                class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue">
+                            <button type="button" onclick="applyFilters()"
+                                class="ml-2 bg-custom-blue text-white py-2 px-4 rounded-lg hover:bg-blue-700">Search</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Advances Table -->
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-200">
@@ -47,10 +75,11 @@
                             <tr class="bg-gray-100">
                                 <th class="py-3 px-4 text-left text-gray-600 font-medium">ID</th>
                                 <th class="py-3 px-4 text-left text-gray-600 font-medium">Employee</th>
+                                <th class="py-3 px-4 text-left text-gray-600 font-medium">Employee ID</th>
                                 <th class="py-3 px-4 text-left text-gray-600 font-medium">Amount</th>
+                                <th class="py-3 px-4 text-left text-gray-600 font-medium">Notes</th>
                                 <th class="py-3 px-4 text-left text-gray-600 font-medium">Status</th>
-
-                                @if (Auth::user()->role === 'hr')
+                                @if (Auth::user()->role === 'admin')
                                     <th class="py-3 px-4 text-left text-gray-600 font-medium">Actions</th>
                                 @endif
                             </tr>
@@ -61,14 +90,16 @@
                                     <td class="py-2 px-4 border-t">{{ $advance->id }}</td>
                                     <td class="py-2 px-4 border-t">
                                         {{ $advance->employee ? $advance->employee->name : 'N/A' }}</td>
+                                    <td class="py-2 px-4 border-t">
+                                        {{ $advance->employee ? $advance->employee->employee_unique_id : 'N/A' }}</td>
                                     <td class="py-2 px-4 border-t">{{ number_format($advance->money, 2) }}</td>
+                                    <td class="py-2 px-4 border-t">{{ $advance->notes ?? 'N/A' }}</td>
                                     <td class="py-2 px-4 border-t">
                                         <span
                                             class="inline-block px-2 py-1 rounded text-sm {{ $advance->status == 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                             {{ $advance->status == 1 ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
-
                                     @if (Auth::user()->role === 'admin')
                                         <td class="py-2 px-4 border-t flex space-x-2">
                                             <a href="{{ route('advances.show', $advance->id) }}"
@@ -97,8 +128,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="py-2 px-4 border-t text-center text-gray-600">No advances
-                                        found.</td>
+                                    <td colspan="{{ Auth::user()->role === 'admin' ? 7 : 6 }}"
+                                        class="py-2 px-4 border-t text-center text-gray-600">No advances found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -107,10 +138,32 @@
 
                 <!-- Pagination -->
                 <div class="mt-4">
-                    {{ $advances->links() }}
+                    {{ $advances->appends(request()->query())->links('pagination::tailwind') }}
                 </div>
             </div>
         </div>
     </div>
 
     @include('partials.js')
+
+    <script>
+        function applyFilters() {
+            const locationId = document.getElementById('location_filter').value;
+            const employeeSearch = document.getElementById('employee_search').value;
+            let url = '/advances?';
+            if (locationId) url += `location_id=${locationId}&`;
+            if (employeeSearch) url += `employee_search=${encodeURIComponent(employeeSearch)}`;
+            window.location.href = url;
+        }
+
+        // Trigger filter on location change or enter key in search
+        document.getElementById('location_filter').addEventListener('change', applyFilters);
+        document.getElementById('employee_search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -13,12 +13,27 @@ class AdvanceController extends Controller
     /**
      * Display a listing of advances.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $advances = Advance::with('employee')->paginate(10);
-        return view('advances.index', compact('advances'));
-    }
+        $query = Advance::with('employee');
 
+        if ($location_id = $request->input('location_id')) {
+            $query->whereHas('employee', function ($q) use ($location_id) {
+                $q->where('location_id', $location_id);
+            });
+        }
+
+        if ($employee_search = $request->input('employee_search')) {
+            $query->whereHas('employee', function ($q) use ($employee_search) {
+                $q->where('employee_unique_id', 'like', '%' . $employee_search . '%');
+            });
+        }
+
+        $advances = $query->paginate(10);
+        $locations = Location::all();
+
+        return view('advances.index', compact('advances', 'locations'));
+    }
     /**
      * Show the form for creating a new advance.
      */
@@ -43,30 +58,33 @@ class AdvanceController extends Controller
         return view('advances.create', compact('locations', 'employees', 'location_id', 'employee_search'));
     }
 
-    /**
-     * Store a newly created advance.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'employee_id' => 'required|exists:employees,id',
-            'money' => 'required|numeric|min:0',
-            'notes' => 'nullable|string',
-            'status' => 'nullable|in:0,1'
+            'advances' => 'required|array',
+            'advances.*.employee_id' => 'required|exists:employees,id',
+            'advances.*.money' => 'nullable|numeric|min:0',
+            'advances.*.notes' => 'nullable|string',
+            'advances.*.status' => 'nullable|in:0,1',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        Advance::create($request->only([
-            'employee_id',
-            'money',
-            'notes',
-            'status'
-        ]));
+        foreach ($request->advances as $advanceData) {
+            // Only create advance if amount is provided
+            if (!empty($advanceData['money'])) {
+                Advance::create([
+                    'employee_id' => $advanceData['employee_id'],
+                    'money' => $advanceData['money'],
+                    'notes' => $advanceData['notes'] ?? null,
+                    'status' => $advanceData['status'] ?? 1,
+                ]);
+            }
+        }
 
-        return redirect()->route('advances.index')->with('success', 'Advance created successfully');
+        return redirect()->route('advances.index')->with('success', 'Advances created successfully');
     }
 
     /**
