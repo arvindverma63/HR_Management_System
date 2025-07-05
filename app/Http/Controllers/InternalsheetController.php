@@ -64,7 +64,7 @@ class InternalsheetController extends Controller
             $overtimeEarnings = $att->status === 'present' && $overtimeHours > 0 ? $otRate * $overtimeHours : 0;
             $otherEarnings = $att->other_earnings ?? 0;
 
-            // New: Allowance fields
+            // Allowance fields
             $houseRentAllowance = $att->house_rent_allowance ?? 0;
             $conveyanceAllowance = $att->conveyance_allowance ?? 0;
             $foodAllowance = $att->food_allowance ?? 0;
@@ -73,14 +73,22 @@ class InternalsheetController extends Controller
             $retrenchmentAllowance = $att->retrenchment_allowance ?? 0;
             $medical = $att->medical ?? 0;
 
+            // Sunday check
+            $dateOfAttendance = Carbon::parse($att->created_at);
+            $isSunday = $dateOfAttendance->isSunday();
+            $sundayWorked = ($isSunday && $att->status === 'present') ? 1 : 0;
+
             if (!isset($report[$employeeId])) {
                 $report[$employeeId] = (object)[
                     'name' => $employeeName,
+                    'employee_unique_id' => $att->employee->employee_unique_id,
+                    'clims_id' => $att->employee->clims_id,
                     'id' => $employeeId,
                     'rate_per_month' => $ratePerMonth,
                     'rate_of_wages' => $hourlyPay,
                     'rate_of_ot' => $otRate,
                     'days_worked' => 0,
+                    'sundays_worked' => 0,
                     'overtime_hours' => 0,
                     'basic_earnings' => 0,
                     'overtime_earnings' => 0,
@@ -108,14 +116,15 @@ class InternalsheetController extends Controller
                 ];
             }
 
-            // Accumulate earnings
+            // Accumulate
             $report[$employeeId]->days_worked += $daysWorked;
+            $report[$employeeId]->sundays_worked += $sundayWorked;
             $report[$employeeId]->overtime_hours += $overtimeHours;
             $report[$employeeId]->basic_earnings += $basicEarnings;
             $report[$employeeId]->overtime_earnings += $overtimeEarnings;
             $report[$employeeId]->other_earnings += $otherEarnings;
 
-            // Accumulate allowances
+            // Allowances
             $report[$employeeId]->house_rent_allowance += $houseRentAllowance;
             $report[$employeeId]->conveyance_allowance += $conveyanceAllowance;
             $report[$employeeId]->food_allowance += $foodAllowance;
@@ -124,24 +133,20 @@ class InternalsheetController extends Controller
             $report[$employeeId]->retrenchment_allowance += $retrenchmentAllowance;
             $report[$employeeId]->medical += $medical;
 
-            // Accumulate base net payment before deductions and allowance subtraction
+            // Net payments before deductions
             $report[$employeeId]->net_payments += ($basicEarnings + $overtimeEarnings + $otherEarnings);
 
-            // Accumulate deductions
+            // Deductions
             $report[$employeeId]->cash_deduction += $att->cash_deduction ?? 0;
             $report[$employeeId]->misc_recovery += $att->misc_recovery ?? 0;
             $report[$employeeId]->bank_adv += $att->bank_adv ?? 0;
         }
 
-        // Finalize totals: total deductions and subtract allowances
+        // Finalize net payments
         foreach ($report as $employeeId => $data) {
-            // Sum total deduction
             $data->total_deduction = $data->cash_deduction + $data->misc_recovery + $data->bank_adv;
-
-            // Subtract total deduction from net payment
             $data->net_payments -= $data->total_deduction;
 
-            // Sum all allowances
             $allowancesTotal = $data->house_rent_allowance
                 + $data->conveyance_allowance
                 + $data->food_allowance
@@ -150,15 +155,12 @@ class InternalsheetController extends Controller
                 + $data->retrenchment_allowance
                 + $data->medical;
 
-            // Subtract total allowances as per your request
             $data->net_payments -= $allowancesTotal;
         }
 
-        // Convert to array for the view
-        $report = array_values($report);
-
-        return view('employeeInternalSheet', ['report' => $report]);
+        return view('employeeInternalSheet', ['report' => array_values($report)]);
     }
+
 
 
 

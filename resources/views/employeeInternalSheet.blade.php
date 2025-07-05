@@ -77,6 +77,22 @@
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
+                                        <th scope="col" data-sort="name" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>FormId</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" data-sort="name" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>ClimsId</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
                                         <th scope="col" data-sort="rate_per_month" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
@@ -96,7 +112,7 @@
                                         <th scope="col" data-sort="rate_of_ot" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>OT Rate</span>
+                                                <span>OT_Rate</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -109,10 +125,18 @@
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
+                                          <th scope="col" data-sort="sunday_worked" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>sunday_worked</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
                                         <th scope="col" data-sort="overtime_hours" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>OT Hours</span>
+                                                <span>OT_Hours</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -120,7 +144,7 @@
                                         <th scope="col" data-sort="basic_earnings" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Earnings: Basic</span>
+                                                <span>Earnings_Basic</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -128,7 +152,7 @@
                                         <th scope="col" data-sort="overtime_earnings" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Earnings: Overtime</span>
+                                                <span>Earnings_Overtime</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -136,7 +160,7 @@
                                         <th scope="col" data-sort="other_earnings" data-order="asc"
                                             class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Earnings: Others</span>
+                                                <span>Earnings_Others</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -144,7 +168,7 @@
                                         <th scope="col" data-sort="cash_deduction" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Deductions: Cash</span>
+                                                <span>Deductions_Cash</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -152,7 +176,7 @@
                                         <th scope="col" data-sort="misc_recovery" data-order="asc"
                                             class="hidden md:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Deductions: Misc</span>
+                                                <span>Deductions_Misc</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -160,7 +184,7 @@
                                         <th scope="col" data-sort="bank_adv" data-order="asc"
                                             class="hidden lg:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Deductions: Bank Adv</span>
+                                                <span>Deductions_Bank_Adv</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -168,7 +192,7 @@
                                         <th scope="col" data-sort="total_deduction" data-order="asc"
                                             class="hidden xl:table-cell px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Deductions: Total</span>
+                                                <span>Deductions_Total</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -179,7 +203,7 @@
                                         <th scope="col" data-sort="net_payments" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>Net Pay</span>
+                                                <span>Net_Pay</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -199,7 +223,7 @@
                                          <th scope="col" data-sort="net_payments" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
-                                                <span>IFSC Code</span>
+                                                <span>IFSC_Code</span>
                                                 <span
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
@@ -220,6 +244,12 @@
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
                                                 {{ $row->name }}
                                             </td>
+                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
+                                                {{ $row->employee_unique_id }}
+                                            </td>
+                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
+                                                {{ $row->clims_id }}
+                                            </td>
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800"
                                                 data-label="Rate/Month">
                                                 {{ number_format($row->rate_per_month, 2) }}
@@ -234,6 +264,9 @@
                                             </td>
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Days">
                                                 {{ $row->days_worked }}
+                                            </td>
+                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Days">
+                                                {{ $row->sundays_worked }}
                                             </td>
                                             <td class="hidden md:table-cell px-2 py-3 md:px-3 md:py-4 text-gray-800"
                                                 data-label="OT Hours">

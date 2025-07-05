@@ -33,7 +33,6 @@
                                     <select id="location_id" name="location_id"
                                         class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
                                         required>
-                                        <option value="">Select Location</option>
                                         @foreach ($locations as $location)
                                             <option value="{{ $location->id }}">{{ $location->name }}</option>
                                         @endforeach
@@ -378,6 +377,17 @@
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                <div>
+                                    <label for="permanent_address"
+                                        class="block text-sm font-medium text-gray-700">Permanent Address</label>
+                                    <textarea id="permanent_address" name="permanent_address"
+                                        class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
+                                        placeholder="Enter permanent address" rows="3">{{ old('permanent_address') }}</textarea>
+                                    @error('permanent_address')
+                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 <div>
                                     <label for="father_name" class="block text-sm font-medium text-gray-700">Father
                                         Name</label>
@@ -386,16 +396,6 @@
                                         class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
                                         placeholder="Enter father's name">
                                     @error('father_name')
-                                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <label for="permanent_address"
-                                        class="block text-sm font-medium text-gray-700">Permanent Address</label>
-                                    <textarea id="permanent_address" name="permanent_address"
-                                        class="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-custom-blue"
-                                        placeholder="Enter permanent address" rows="3">{{ old('permanent_address') }}</textarea>
-                                    @error('permanent_address')
                                         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -604,7 +604,7 @@
                                     @enderror
                                 </div>
 
-                                  <div>
+                                <div>
                                     <label for="bank_name" class="block text-sm font-medium text-gray-700">Bank
                                         Bank Name</label>
                                     <input type="text" id="bank_name" name="bank_name"
@@ -616,7 +616,7 @@
                                     @enderror
                                 </div>
 
-                                  <div>
+                                <div>
                                     <label for="bank_branch" class="block text-sm font-medium text-gray-700">
                                         Bank Branch Name</label>
                                     <input type="text" id="bank_branch" name="bank_branch"
@@ -628,7 +628,7 @@
                                     @enderror
                                 </div>
 
-                                  <div>
+                                <div>
                                     <label for="bank_location" class="block text-sm font-medium text-gray-700">Bank
                                         Bank Location</label>
                                     <input type="text" id="bank_location" name="bank_location"
