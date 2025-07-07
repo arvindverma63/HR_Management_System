@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Models\User;
+use App\Models\Workman;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -42,6 +44,9 @@ class AuthController extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('dashboard')->with('success', 'Welcome Admin!');
             } elseif ($user->role === 'hr') {
+                $email = Auth::user()->email;
+                $workman = Workman::where('email', $email)->first();
+                Session::put('location_id',$workman->location_id);
                 return redirect()->route('employee.index')->with('success', 'Welcome HR!');
             } else {
                 return redirect()->route('employee.index')->with('success', 'Logged in successfully!');

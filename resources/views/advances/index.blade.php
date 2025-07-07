@@ -46,11 +46,16 @@
                         <label for="location_filter" class="block text-xs font-medium text-gray-700">Location</label>
                         <select id="location_filter" name="location_id"
                             class="mt-1 w-full md:w-48 p-1.5 border rounded-md focus:ring-1 focus:ring-custom-blue text-sm">
-                            <option value="">All Locations</option>
+
                             @foreach ($locations as $location)
-                                <option value="{{ $location->id }}"
-                                    {{ request('location_id') == $location->id ? 'selected' : '' }}>
-                                    {{ $location->name }}</option>
+                                @if (Auth::user()->role == 'admin')
+                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                @endif
+                                @if (Auth::user()->role == 'hr')
+                                    @if ($location->id == Session::get('location_id'))
+                                        <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                    @endif
+                                @endif
                             @endforeach
                         </select>
                     </div>
