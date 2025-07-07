@@ -84,6 +84,7 @@ class InternalsheetController extends Controller
                     'employee_unique_id' => $att->employee->employee_unique_id,
                     'clims_id' => $att->employee->clims_id,
                     'id' => $employeeId,
+                    'location' => $att->employee->location->name,
                     'rate_per_month' => $ratePerMonth,
                     'rate_of_wages' => $hourlyPay,
                     'rate_of_ot' => $otRate,

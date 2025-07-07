@@ -77,6 +77,14 @@
                                                     class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
                                             </div>
                                         </th>
+                                         <th scope="col" data-sort="name" data-order="asc"
+                                            class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <span>Location</span>
+                                                <span
+                                                    class="sort-icon opacity-50 hover:opacity-100 transition-opacity"></span>
+                                            </div>
+                                        </th>
                                         <th scope="col" data-sort="name" data-order="asc"
                                             class="px-2 py-2 md:px-3 md:py-3 cursor-pointer hover:bg-custom-blue/80 transition-colors">
                                             <div class="flex items-center justify-between">
@@ -243,6 +251,9 @@
                                         <tr class="hover:bg-gray-50 transition-colors duration-200">
                                             <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
                                                 {{ $row->name }}
+                                            </td>
+                                            <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
+                                                {{ $row->location }}
                                             </td>
                                              <td class="px-2 py-3 md:px-3 md:py-4 text-gray-800" data-label="Name">
                                                 {{ $row->employee_unique_id }}
