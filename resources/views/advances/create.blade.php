@@ -43,15 +43,24 @@
                     <div class="mb-4">
                         <label for="location_id" class="block text-gray-700 font-medium mb-2">Location</label>
                         <select name="location_id" id="location_id"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-custom-blue"
-                            onchange="this.form.submit()">
-                            <option value="">Select Location</option>
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-custom-blue">
                             @foreach ($locations as $location)
-                                <option value="{{ $location->id }}"
-                                    {{ old('location_id', $location_id) == $location->id ? 'selected' : '' }}>
-                                    {{ $location->name }}</option>
+                                @if (Auth::user()->role == 'admin')
+                                    <option value="{{ $location->id }}"
+                                        {{ request('location_id') == $location->id ? 'selected' : '' }}>
+                                        {{ $location->name }}
+                                    </option>
+                                @endif
+
+                                @if (Auth::user()->role == 'hr' && $location->id == Session::get('location_id'))
+                                    <option value="{{ $location->id }}"
+                                        {{ request('location_id') == $location->id ? 'selected' : '' }}>
+                                        {{ $location->name }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
+
                     </div>
 
                     <div class="mb-4">
@@ -96,7 +105,7 @@
                                             <td class="px-4 py-2">
                                                 {{ $employee->employee_unique_id }}
                                             </td>
-                                             <td class="px-4 py-2">
+                                            <td class="px-4 py-2">
                                                 {{ $employee->clims_id }}
                                             </td>
                                             <td class="px-4 py-2">
@@ -146,5 +155,29 @@
 
     @include('partials.js')
 </body>
+<script>
+    const selector = document.getElementById('location_id');
+
+    // On change, redirect to same page with selected location_id
+    selector.addEventListener('change', function() {
+        const locationId = this.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('location_id', locationId);
+        window.location.href = url.toString();
+    });
+
+    // Auto-filter on page load if no location_id in URL
+    window.addEventListener('DOMContentLoaded', function() {
+        const url = new URL(window.location.href);
+        if (!url.searchParams.get('location_id')) {
+            const selected = selector.value;
+            if (selected) {
+                url.searchParams.set('location_id', selected);
+                window.location.href = url.toString();
+            }
+        }
+    });
+</script>
+
 
 </html>
